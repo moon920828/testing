@@ -29,6 +29,8 @@ jobs:
           $HOME/.integrationcli/bin/integrationcli prefs set -p $project -r $region -t $token
 
           $HOME/.integrationcli/bin/integrationcli integrations list
+          $HOME/.integrationcli/bin/integrationcli connectors list 
+          $HOME/.integrationcli/bin/integrationcli authconfigs list 
 
       - name: 'Create integration JSON '
         run: |
