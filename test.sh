@@ -1,3 +1,3 @@
 echo 'running'
 
-integrationcli integrations list --verbose
+$HOME/.integrationcli/bin/integrationcli integrations list --verbose
