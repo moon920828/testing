@@ -34,4 +34,4 @@ jobs:
 
       - name: 'Create integration JSON '
         run: |
-          $HOME/.integrationcli/bin/integrationcli integrations apply -f . -e dev --wait=true
+          $HOME/.integrationcli/bin/integrationcli integrations apply -f . -e dev --wait=true --verbose --help

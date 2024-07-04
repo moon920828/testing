@@ -1,6 +1,5 @@
 {
     "displayName": "testing",
-    "credentialType": "SERVICE_ACCOUNT",
     "visibility": "CLIENT_VISIBLE",
     "state": "VALID",
     "decryptedCredential": {
