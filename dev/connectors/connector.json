@@ -2,8 +2,7 @@
     "description": "Spanner Test for demo",
     "connectorDetails": {
         "provider": "gcp", 
-        "connector": "cloudSpanner",
-        "name": "spanner-test", 
+        "name": "cloudSpanner", 
         "version": 1 
     },
     "configVariables": [ 
