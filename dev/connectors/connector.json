@@ -1,7 +1,8 @@
 {
     "description": "Spanner Test for demo",
     "connectorDetails": {
-        "provider": "spanner", 
+        "provider": "gcp", 
+        "connector": "cloudSpanner",
         "name": "spanner-test", 
         "version": 1 
     },
