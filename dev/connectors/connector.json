@@ -1,0 +1,38 @@
+{
+    "description": "Spanner Test for demo",
+    "connectorDetails": {
+        "provider": "spanner", 
+        "name": "spanner-test", 
+        "version": 1 
+    },
+    "configVariables": [ 
+        {
+            "key": "project_id",
+            "stringValue": "my-project-1553458465069"
+        },
+        {
+            "key": "database_region",
+            "stringValue": "us-central1"
+        },
+        {
+            "key": "instance_id",
+            "stringValue": "test"
+        },
+        {
+            "key": "database_name",
+            "stringValue": "test"
+        },
+        {
+            "key": "database_dialect",
+            "stringValue": "GoogleStandardSQL"
+        }
+    ],
+    "serviceAccount": "398978717956-compute@developer.gserviceaccount.com",
+    "nodeConfig": {
+        "minNodeCount": 2,
+        "maxNodeCount": 5
+    },
+    "status": {
+        "state": "ACTIVE"
+    }
+}
