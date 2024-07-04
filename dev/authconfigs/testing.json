@@ -1,0 +1,7 @@
+{
+    "displayName": "testing",
+    "credentialType": "SERVICE_ACCOUNT",
+    "visibility": "CLIENT_VISIBLE",
+    "state": "VALID",
+    "serviceAccount": "test-91@my-project-1553458465069.iam.gserviceaccount.com"
+}

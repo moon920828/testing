@@ -30,7 +30,7 @@
     "serviceAccount": "398978717956-compute@developer.gserviceaccount.com",
     "nodeConfig": {
         "minNodeCount": 2,
-        "maxNodeCount": 5
+        "maxNodeCount": 6
     },
     "status": {
         "state": "ACTIVE"
