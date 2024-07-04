@@ -32,11 +32,6 @@ jobs:
           $HOME/.integrationcli/bin/integrationcli connectors list 
           $HOME/.integrationcli/bin/integrationcli authconfigs list 
 
-      - name: '_Help integration apply '
-        run: |
-          $HOME/.integrationcli/bin/integrationcli integrations apply --help --verbose 
-
-
       - name: 'Create integration JSON '
         run: |
           $HOME/.integrationcli/bin/integrationcli integrations apply -f . -e dev --wait=true 
