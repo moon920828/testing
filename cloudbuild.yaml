@@ -5,4 +5,5 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args: ['test.sh']
-
+options:
+  logging: GCS_ONLY
