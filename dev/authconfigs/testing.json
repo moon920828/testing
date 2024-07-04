@@ -3,6 +3,7 @@
     "visibility": "CLIENT_VISIBLE",
     "state": "VALID",
     "decryptedCredential": {
+        "credentialType": "SERVICE_ACCOUNT",
         "serviceAccountCredentials": {
             "serviceAccount": "test-91@my-project-1553458465069.iam.gserviceaccount.com",
             "scope": "https://www.googleapis.com/auth/pubsub"          
