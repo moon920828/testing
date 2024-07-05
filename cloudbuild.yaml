@@ -21,7 +21,7 @@ steps:
   args:
     - '-c'
     - |
-      docker pull us-docker.pkg.dev/appintegration-toolkit/images/integrationcli-builder:latest
+      docker pull us-docker.pkg.dev/appintegration-toolkit/images/integrationcli-builder
 
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
