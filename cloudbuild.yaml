@@ -3,3 +3,6 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args: ['-c', './script.sh']
+
+options:
+  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
