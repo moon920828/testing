@@ -46,19 +46,19 @@ EOF
 
 echo $REQUEST_BODY
 
-GET_RESPONSE=$(curl -s -X GET -H "Authorization: Bearer $ACCESS_TOKEN" "$GET_POST_API_URL")
+GET_RESPONSE=$(curl -X GET -H "Authorization: Bearer $ACCESS_TOKEN" "$GET_POST_API_URL")
 
 echo $GET_RESPONSE
 
 # if [[ "$GET_RESPONSE" == *"\"error\": {"* && "$GET_RESPONSE" == *"\"code\": 404"* ]]; then
-#   echo "Error code is 404, Making a PUT request."
+#   echo "Error code is 404, Making a POST request."
+
+#  # Make the POST request
+#   curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$REQUEST_BODY" "$GET_POST_API_URL"
+# else
+#   echo "No error code 404 found, Making a PUT request."
 
 #   # Make the PUT request
 #   curl -X PUT -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$REQUEST_BODY" "$PATCH_API_URL"
-# else
-#   echo "No error code 404 found, Making a POST request."
-
-#   # Make the POST request
-#   curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$REQUEST_BODY" "$GET_POST_API_URL"
 # fi
 
