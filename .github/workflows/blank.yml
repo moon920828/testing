@@ -35,3 +35,12 @@ jobs:
       - name: 'Create integration JSON '
         run: |
           $HOME/.integrationcli/bin/integrationcli integrations apply -f . -e dev --wait=true 
+
+      - name: 'deploy'
+        uses: 'google-github-actions/deploy-cloud-functions@v3'
+        timeout-minutes: 10
+        with:
+          name: 'my-function'
+          runtime: 'nodejs22'
+          source_dir: ./cloudFunction
+          entry_point: hey
