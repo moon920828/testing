@@ -10,15 +10,21 @@ ACCESS_TOKEN=$(gcloud auth application-default print-access-token)
 # SECRET=$(gcloud secrets versions access latest --secret=MY_SECRET)
 SECRET="https://www.googleapis.com/auth/pubsub"
 
+NAME="cloudbuild-test-1"
+AUTH_CONFIG="my-project-1553458465069/locations/us-central1/authConfigs"
+AUTH_CONFIG_NAME="$AUTH_CONFIG/$NAME"
+
 # API URL
-API_URL="https://integrations.googleapis.com/v1/projects/my-project-1553458465069/locations/us-central1/authConfigs"
+API_URL="https://integrations.googleapis.com/v1"
+GET_POST_API_URL="$API_URL/$AUTH_CONFIG"
+PATCH_API_URL="$API_URL/$AUTH_CONFIG_NAME"
+
 
 # Create the JSON request body
-# REQUEST_BODY=$(jq -n --arg key1 "value1" --arg key2 "$SECRET" '{key1: $key1, key2: $key2}')
 REQUEST_BODY=$(cat <<EOF
 {
-    "name": "projects/my-project-1553458465069/locations/us-central1/authConfigs/cloudbuild-test-1",
-    "displayName": "cloudbuild-test-1",
+    "name": "$AUTH_CONFIG_NAME",
+    "displayName": "$NAME",
     "visibility": "CLIENT_VISIBLE",
     "state": "VALID",
     "decryptedCredential": {
@@ -32,5 +38,17 @@ REQUEST_BODY=$(cat <<EOF
 EOF
 )
 
-# Make the POST request
-curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$REQUEST_BODY" "$API_URL"
+GET_RESPONSE=$(curl -s -X GET -H "Authorization: Bearer $ACCESS_TOKEN" "$GET_POST_API_URL")
+
+if [[ "$GET_RESPONSE" == *"\"error\": {"* && "$GET_RESPONSE" == *"\"code\": 404"* ]]; then
+  echo "Error code is 404, Making a PUT request."
+
+  # Make the PUT request
+  curl -X PUT -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$REQUEST_BODY" "$PATCH_API_URL"
+else
+  echo "No error code 404 found, Making a POST request."
+
+  # Make the POST request
+  curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$REQUEST_BODY" "$GET_POST_API_URL"
+fi
+
