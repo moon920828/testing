@@ -8,7 +8,7 @@ ACCESS_TOKEN=$(gcloud auth application-default print-access-token)
 
 # Retrieve the secret from Secret Manager
 # SECRET=$(gcloud secrets versions access latest --secret=MY_SECRET)
-SECRET="https://www.googleapis.com/auth/pubsub"
+SECRET="https://www.googleapis.com/auth/pubsub, https://www.googleapis.com/auth/cloud-platform"
 
 NAME="cloudbuild-test-1"
 AUTH_CONFIG="projects/my-project-1553458465069/locations/us-central1/authConfigs"
@@ -18,7 +18,7 @@ AUTH_CONFIG_NAME="$AUTH_CONFIG/$NAME"
 API_URL="https://integrations.googleapis.com/v1"
 GET_API_URL="$API_URL/$AUTH_CONFIG_NAME"
 POST_API_URL="$API_URL/$AUTH_CONFIG"
-PATCH_API_URL="$API_URL/$AUTH_CONFIG_NAME?updateMask=decryptedCredential.serviceAccountCredentials"
+PATCH_API_URL="$API_URL/$AUTH_CONFIG_NAME?updateMask=decrypted_credential"
 
 echo $AUTH_CONFIG
 echo $AUTH_CONFIG_NAME
