@@ -13,11 +13,30 @@ SECRET="https://www.googleapis.com/auth/pubsub"
 # API URL
 API_URL="https://integrations.googleapis.com/v1/projects/my-project-1553458465069/locations/us-central1/authConfigs"
 
+
+CONFIG_JSON=$(cat config.json)
+
+# Extract values using jq
+NAME=$(echo "$CONFIG_JSON" | jq -r '.name')
+DISPLAY_NAME=$(echo "$CONFIG_JSON" | jq -r '.displayName')
+VISIBILITY=$(echo "$CONFIG_JSON" | jq -r '.visibility')
+STATE=$(echo "$CONFIG_JSON" | jq -r '.state')
+SERVICE_ACCOUNT=$(echo "$CONFIG_JSON" | jq -r '.decryptedCredential.serviceAccountCredentials.serviceAccount')
+SCOPE=$(echo "$CONFIG_JSON" | jq -r '.decryptedCredential.serviceAccountCredentials.scope')
+
+# Print the extracted values
+echo "Name: $NAME"
+echo "Display Name: $DISPLAY_NAME"
+echo "Visibility: $VISIBILITY"
+echo "State: $STATE"
+echo "Service Account: $SERVICE_ACCOUNT"
+echo "Scope: $SCOPE"
+
 # Create the JSON request body
 # REQUEST_BODY=$(jq -n --arg key1 "value1" --arg key2 "$SECRET" '{key1: $key1, key2: $key2}')
 REQUEST_BODY=$(cat <<EOF
 {
-    "name": "projects/my-project-1553458465069/locations/us-central1/authConfigs/cloudbuild-test-1"
+    "name": "projects/my-project-1553458465069/locations/us-central1/authConfigs/cloudbuild-test-1",
     "displayName": "testing",
     "visibility": "CLIENT_VISIBLE",
     "state": "VALID",
@@ -33,4 +52,4 @@ EOF
 )
 
 # Make the POST request
-curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$REQUEST_BODY" "$API_URL"
+curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$CONFIG_JSON" "$API_URL"
