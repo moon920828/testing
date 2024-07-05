@@ -16,6 +16,13 @@ steps:
 #       echo "Project ID: ${PROJECT_ID}"
 #       echo "Project Region: ${PROJECT_REGION}"
 
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        docker pull us-docker.pkg.dev/appintegration-toolkit/images/integrationcli-builder:latest
+
 - name: 'gcr.io/cloud-builders/docker'
   entrypoint: 'bash'
   args:
