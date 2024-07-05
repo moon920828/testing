@@ -39,6 +39,7 @@ steps:
       # Run the integrationcli command
       integrationcli prefs set -p "$project" -r "$region" -t "$token" 
       integrationcli integrations list
+      integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
 
 # - name: 'gcr.io/cloud-builders/gcloud'
 #   entrypoint: 'bash'
