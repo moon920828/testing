@@ -11,7 +11,7 @@ ACCESS_TOKEN=$(gcloud auth application-default print-access-token)
 SECRET="https://www.googleapis.com/auth/pubsub"
 
 NAME="cloudbuild-test-1"
-AUTH_CONFIG="my-project-1553458465069/locations/us-central1/authConfigs"
+AUTH_CONFIG="projects/my-project-1553458465069/locations/us-central1/authConfigs"
 AUTH_CONFIG_NAME="$AUTH_CONFIG/$NAME"
 
 # API URL
@@ -23,7 +23,8 @@ PATCH_API_URL="$API_URL/$AUTH_CONFIG_NAME"
 echo $AUTH_CONFIG
 echo $AUTH_CONFIG_NAME
 echo $API_URL
-echo $GET_POST_API_URL
+echo $GET_API_URL
+echo $POST_API_URL
 echo $PATCH_API_URL
 
 
