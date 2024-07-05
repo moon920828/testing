@@ -1,11 +1,29 @@
 steps:
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args:
+#     - '-c'
+#     - |
+#       chmod +x ./script.sh
+#       ./script.sh
+
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
     - '-c'
     - |
-      chmod +x ./script.sh
-      ./script.sh
+      # Authenticate to Google Cloud
+      gcloud auth configure-docker us-docker.pkg.dev
+      
+      # Set multiple variables
+      token=$(gcloud auth print-access-token) 
+      project=$(gcloud config get-value project | head -n 1)
+      region="us-central1"
+      
+      # Write variables to a file
+      echo "token=${token}" >> /workspace/env_vars.txt
+      echo "project=${project}" >> /workspace/env_vars.txt
+      echo "region=${region}" >> /workspace/env_vars.txt
 
 - name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
   entrypoint: 'sh'
@@ -13,9 +31,9 @@ steps:
     - '-c'
     - |
 
-      token=$(gcloud auth print-access-token) 
-      project=$(gcloud config get-value project | head -n 1)
-      region=us-central1
+      # token=$(gcloud auth print-access-token) 
+      # project=$(gcloud config get-value project | head -n 1)
+      # region=us-central1
       integrationcli prefs set -p "$project" -r "$region" -t "$token" 
       # Run the first integrationcli command
       integrationcli integrations list
