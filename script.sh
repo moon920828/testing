@@ -8,7 +8,7 @@ ACCESS_TOKEN=$(gcloud auth application-default print-access-token)
 
 # Retrieve the secret from Secret Manager
 # SECRET=$(gcloud secrets versions access latest --secret=MY_SECRET)
-SECRET="https://www.googleapis.com/auth/pubsub, https://www.googleapis.com/auth/cloud-platform"
+SECRET="https://www.googleapis.com/auth/pubsub"
 
 NAME="cloudbuild-test-1"
 AUTH_CONFIG="projects/my-project-1553458465069/locations/us-central1/authConfigs"
