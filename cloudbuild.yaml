@@ -31,6 +31,9 @@ steps:
     - '-c'
     - |
 
+      # Load the variables
+      source /workspace/env_vars.txt
+
       # token=$(gcloud auth print-access-token) 
       # project=$(gcloud config get-value project | head -n 1)
       # region=us-central1
