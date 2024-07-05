@@ -1,4 +1,10 @@
 steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - 'chmod +x ./script.sh'
+    
 # Step to run the custom script
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
