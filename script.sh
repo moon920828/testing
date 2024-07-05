@@ -18,7 +18,7 @@ AUTH_CONFIG_NAME="$AUTH_CONFIG/$NAME"
 API_URL="https://integrations.googleapis.com/v1"
 GET_API_URL="$API_URL/$AUTH_CONFIG_NAME"
 POST_API_URL="$API_URL/$AUTH_CONFIG"
-PATCH_API_URL="$API_URL/$AUTH_CONFIG_NAME"
+PATCH_API_URL="$API_URL/$AUTH_CONFIG_NAME?updateMask=descriptedCredential.serviceAccountCredentials"
 
 echo $AUTH_CONFIG
 echo $AUTH_CONFIG_NAME
