@@ -3,12 +3,37 @@ steps:
   entrypoint: 'bash'
   args:
     - '-c'
-    - 'chmod +x ./script.sh'
-    
-# Step to run the custom script
+    - |
+      chmod +x ./script.sh
+      ./script.sh
+
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
-  args: ['-c', './script.sh']
+  args:
+    - '-c'
+    - |
+      # Accessing Project ID and Region
+      echo "Project ID: ${PROJECT_ID}"
+      echo "Project Region: ${PROJECT_REGION}"
+
+- name: 'gcr.io/cloud-builders/docker'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      docker run \
+        -v "$(pwd):/workspace" \
+        us-docker.pkg.dev/appintegration-toolkit/images/integrationcli-builder:latest \
+        sh -c '
+          ls &&
+          token=$(gcloud auth print-access-token) &&
+          project=$(gcloud config get-value project | head -n 1) &&
+          region=us-central1 &&
+          integrationcli prefs set -p "$project" -r "$region" -t "$token" &&
+          integrationcli integrations list &&
+          integrationcli connectors list &&
+          integrationcli authconfigs list 
+        '
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
