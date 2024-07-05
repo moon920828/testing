@@ -19,6 +19,12 @@ API_URL="https://integrations.googleapis.com/v1"
 GET_POST_API_URL="$API_URL/$AUTH_CONFIG"
 PATCH_API_URL="$API_URL/$AUTH_CONFIG_NAME"
 
+echo $AUTH_CONFIG
+echo $AUTH_CONFIG_NAME
+echo $API_URL
+echo $GET_POST_API_URL
+echo $PATCH_API_URL
+
 
 # Create the JSON request body
 REQUEST_BODY=$(cat <<EOF
@@ -37,6 +43,8 @@ REQUEST_BODY=$(cat <<EOF
 }
 EOF
 )
+
+echo $REQUEST_BODY
 
 GET_RESPONSE=$(curl -s -X GET -H "Authorization: Bearer $ACCESS_TOKEN" "$GET_POST_API_URL")
 
