@@ -18,7 +18,7 @@ API_URL="https://integrations.googleapis.com/v1/projects/my-project-155345846506
 REQUEST_BODY=$(cat <<EOF
 {
     "name": "projects/my-project-1553458465069/locations/us-central1/authConfigs/cloudbuild-test-1",
-    "displayName": "testing",
+    "displayName": "cloudbuild-test-1",
     "visibility": "CLIENT_VISIBLE",
     "state": "VALID",
     "decryptedCredential": {
@@ -33,4 +33,4 @@ EOF
 )
 
 # Make the POST request
-curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$CONFIG_JSON" "$API_URL"
+curl -X POST -H "Authorization: Bearer $ACCESS_TOKEN" -H "Content-Type: application/json" -d "$REQUEST_BODY" "$API_URL"
