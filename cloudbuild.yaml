@@ -77,11 +77,11 @@ steps:
     # Authenticate using the service account key
     # gcloud auth activate-service-account --key-file=/tmp/key.json
 
-    gcloud auth login
+    # gcloud auth login
 
     # Deploy the Cloud Function
-    gcloud functions deploy helloWorld \
-      --runtime nodejs16 \
+    gcloud functions deploy helloWorld123 \
+      --runtime nodejs20 \
       --trigger-http \
       --allow-unauthenticated \
       --region=us-central1 \
