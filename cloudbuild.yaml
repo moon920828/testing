@@ -67,15 +67,25 @@ steps:
 
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'bash'
   args:
-  - gcloud
-  - functions
-  - deploy
-  - testing2
-  - --region=us-central1
-  - --source=cloudFunction
-  - --trigger-http
-  - --runtime=Node.js 20
+  - '-c'
+  - |
+    # Fetch the service account key from Secret Manager
+    # gcloud secrets versions access latest --secret=cloud-build-sa-key > /tmp/key.json
+
+    # Authenticate using the service account key
+    # gcloud auth activate-service-account --key-file=/tmp/key.json
+
+    gcloud auth login
+
+    # Deploy the Cloud Function
+    gcloud functions deploy helloWorld \
+      --runtime nodejs16 \
+      --trigger-http \
+      --allow-unauthenticated \
+      --region=us-central1 \
+      --source=cloudFunction
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
