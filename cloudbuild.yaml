@@ -7,8 +7,15 @@ steps:
 #       chmod +x ./script.sh
 #       ./script.sh
 
-- name: 'ubuntu'
-  args: ['bash', './subs.sh']
+# - name: 'ubuntu'
+#   args: ['bash', './subs.sh']
+#   secretEnv: ['USERNAME', 'PASSWORD']
+
+- name: gcr.io/${PROJECT_ID}/envsubst
+  args: ["env.json"]
+  env:
+  - 'BUILD_ID=$BUILD_ID'
+  - 'PROJECT_ID=$PROJECT_ID'
   secretEnv: ['USERNAME', 'PASSWORD']
 
 - name: 'ubuntu'
