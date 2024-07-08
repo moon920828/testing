@@ -72,10 +72,10 @@ steps:
   - functions
   - deploy
   - testing2
-  - --region=FUNCTION_REGION
+  - --region=us-central1
   - --source=./cloudFunction
   - --trigger-http
-  - --runtime=RUNTIME
+  - --runtime=Node.js 20
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
