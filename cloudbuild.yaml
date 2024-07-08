@@ -73,7 +73,7 @@ steps:
   - deploy
   - testing2
   - --region=us-central1
-  - --source=/cloudFunction
+  - --source=cloudFunction
   - --trigger-http
   - --runtime=Node.js 20
 
