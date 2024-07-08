@@ -48,8 +48,8 @@ steps:
 
       ls
 
-      cat env.json
-      cat env-test.json
+      # cat env.json
+      # cat env-test.json
 
       # echo "project id -> $PROJECT_ID"
       # echo "location -> $LOCATION"
