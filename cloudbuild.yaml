@@ -53,15 +53,29 @@ steps:
 
       # echo "project id -> $PROJECT_ID"
       # echo "location -> $LOCATION"
-
       # Load the variables
       source /workspace/env_vars.txt
       
       # Run the integrationcli command
       integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
       integrationcli integrations list
-      integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --wait=true
-      integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --wait=true
+
+      integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
+
+      # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --wait=true
+      # integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --wait=true
+
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+  - gcloud
+  - functions
+  - deploy
+  - testing2
+  - --region=FUNCTION_REGION
+  - --source=./cloudFunction
+  - --trigger-http
+  - --runtime=RUNTIME
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
