@@ -22,48 +22,48 @@ steps:
 #   args: ['bash', './testing.sh']
 #   secretEnv: ['USERNAME', 'PASSWORD']
   
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
-      # Authenticate to Google Cloud
-      gcloud auth configure-docker us-docker.pkg.dev
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args:
+#     - '-c'
+#     - |
+#       # Authenticate to Google Cloud
+#       gcloud auth configure-docker us-docker.pkg.dev
       
-      # Set multiple variables
-      token=$(gcloud auth print-access-token) 
-      # project=$(gcloud config get-value project | head -n 1)
-      region="us-central1"
+#       # Set multiple variables
+#       token=$(gcloud auth print-access-token) 
+#       # project=$(gcloud config get-value project | head -n 1)
+#       region="us-central1"
       
-      # Write variables to a file
-      echo "token=${token}" >> /workspace/env_vars.txt
-      # echo "project=${project}" >> /workspace/env_vars.txt
-      echo "region=${region}" >> /workspace/env_vars.txt
+#       # Write variables to a file
+#       echo "token=${token}" >> /workspace/env_vars.txt
+#       # echo "project=${project}" >> /workspace/env_vars.txt
+#       echo "region=${region}" >> /workspace/env_vars.txt
 
-- name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
-  entrypoint: 'sh'
-  args:
-    - '-c'
-    - |
+# - name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
+#   entrypoint: 'sh'
+#   args:
+#     - '-c'
+#     - |
 
-      ls
+#       ls
 
-      # cat env.json
-      # cat env-test.json
+#       # cat env.json
+#       # cat env-test.json
 
-      # echo "project id -> $PROJECT_ID"
-      # echo "location -> $LOCATION"
-      # Load the variables
-      source /workspace/env_vars.txt
+#       # echo "project id -> $PROJECT_ID"
+#       # echo "location -> $LOCATION"
+#       # Load the variables
+#       source /workspace/env_vars.txt
       
-      # Run the integrationcli command
-      integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
-      integrationcli integrations list
+#       # Run the integrationcli command
+#       integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
+#       integrationcli integrations list
 
-      # integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
+#       # integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
 
-      integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --wait=true
-      integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --wait=true
+#       integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --wait=true
+#       integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --wait=true
 
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -73,7 +73,7 @@ steps:
   - deploy
   - testing2
   - --region=us-central1
-  - --source=./cloudFunction
+  - --source=/cloudFunction
   - --trigger-http
   - --runtime=Node.js 20
 
