@@ -37,6 +37,8 @@ steps:
 
       ls
 
+      cat env.json
+
       # echo "project id -> $PROJECT_ID"
       # echo "location -> $LOCATION"
 
