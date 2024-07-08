@@ -4,6 +4,8 @@
 TEMPLATE_FILE="env.json"
 OUTPUT_FILE="env-test.json"
 
+printenv
+
 # Read the template and substitute environment variables
 envsubst < $TEMPLATE_FILE > $OUTPUT_FILE
 
