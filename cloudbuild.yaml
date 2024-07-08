@@ -7,6 +7,10 @@ steps:
 #       chmod +x ./script.sh
 #       ./script.sh
 
+- name: 'ubuntu'
+  args: ['bash', './testing.sh']
+  secretEnv: ['USERNAME', 'PASSWORD']
+  
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
@@ -33,6 +37,9 @@ steps:
 
       ls
 
+      echo "project id -> $PROJECT_ID"
+      echo "location -> $LOCATION"
+
       # Load the variables
       source /workspace/env_vars.txt
       
@@ -41,40 +48,11 @@ steps:
       integrationcli integrations list
       integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
 
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   entrypoint: 'bash'
-#   args:
-#     - '-c'
-#     - |
-#       # Accessing Project ID and Region
-#       echo "Project ID: ${PROJECT_ID}"
-#       echo "Project Region: ${PROJECT_REGION}"
-
-# - name: 'gcr.io/cloud-builders/docker'
-#   entrypoint: 'bash'
-#   args:
-#     - '-c'
-#     - |
-#       docker pull us-docker.pkg.dev/appintegration-toolkit/images/integrationcli-builder
-
-# - name: 'gcr.io/cloud-builders/docker'
-#   entrypoint: 'bash'
-#   args:
-#     - '-c'
-#     - |
-#       docker run \
-#         -v "$(pwd):/workspace" \
-#         us-docker.pkg.dev/appintegration-toolkit/images/integrationcli-builder \
-#         sh -c '
-#           ls &&
-#           token=$(gcloud auth print-access-token) &&
-#           project=$(gcloud config get-value project | head -n 1) &&
-#           region=us-central1 &&
-#           integrationcli prefs set -p "$project" -r "$region" -t "$token" &&
-#           integrationcli integrations list &&
-#           integrationcli connectors list &&
-#           integrationcli authconfigs list 
-#         '
-
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/$_PASSWORD_SECRET_NAME/versions/latest
+    env: 'PASSWORD'
+  - versionName: projects/$PROJECT_ID/secrets/$_USERNAME_SECRET_NAME/versions/latest
+    env: 'USERNAME'
