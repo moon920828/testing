@@ -87,7 +87,8 @@ steps:
       --region=us-central1 \
       --source=cloudFunction \
       --gen2 \
-      --entry-point=hey
+      --entry-point=hey \
+      ----service-account=application-integration-test@my-project-1553458465069.iam.gserviceaccount.com
 
 options:
   logging: CLOUD_LOGGING_ONLY
