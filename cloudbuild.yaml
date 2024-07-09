@@ -90,7 +90,8 @@ steps:
       --entry-point=hey
 
 options:
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+  logging: CLOUD_LOGGING_ONLY
+  # defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
 # availableSecrets:
 #   secretManager:
 #   - versionName: projects/$PROJECT_ID/secrets/$_PASSWORD_SECRET_NAME/versions/latest
