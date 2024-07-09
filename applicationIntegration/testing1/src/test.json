@@ -58,6 +58,9 @@
     "parameter": {
       "key": "`CONFIG_testing1`",
       "dataType": "STRING_VALUE",
+      "defaultValue": {
+        "stringValue": ""
+      },
       "displayName": "`CONFIG_testing1`"
     },
     "value": {
@@ -67,6 +70,9 @@
     "parameter": {
       "key": "`CONFIG_testing2`",
       "dataType": "STRING_VALUE",
+      "defaultValue": {
+        "stringValue": ""
+      },
       "displayName": "`CONFIG_testing2`"
     },
     "value": {
