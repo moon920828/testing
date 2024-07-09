@@ -22,72 +22,72 @@ steps:
 #   args: ['bash', './testing.sh']
 #   secretEnv: ['USERNAME', 'PASSWORD']
   
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   entrypoint: 'bash'
-#   args:
-#     - '-c'
-#     - |
-#       # Authenticate to Google Cloud
-#       gcloud auth configure-docker us-docker.pkg.dev
-      
-#       # Set multiple variables
-#       token=$(gcloud auth print-access-token) 
-#       # project=$(gcloud config get-value project | head -n 1)
-#       region="us-central1"
-      
-#       # Write variables to a file
-#       echo "token=${token}" >> /workspace/env_vars.txt
-#       # echo "project=${project}" >> /workspace/env_vars.txt
-#       echo "region=${region}" >> /workspace/env_vars.txt
-
-# - name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
-#   entrypoint: 'sh'
-#   args:
-#     - '-c'
-#     - |
-
-#       ls
-
-#       # cat env.json
-#       # cat env-test.json
-
-#       # echo "project id -> $PROJECT_ID"
-#       # echo "location -> $LOCATION"
-#       # Load the variables
-#       source /workspace/env_vars.txt
-      
-#       # Run the integrationcli command
-#       integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
-#       integrationcli integrations list
-
-#       # integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
-
-#       integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --wait=true
-#       integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --wait=true
-
-
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+- name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
-  - '-c'
-  - |
-    # Fetch the service account key from Secret Manager
-    # gcloud secrets versions access latest --secret=cloud-build-sa-key > /tmp/key.json
+    - '-c'
+    - |
+      # Authenticate to Google Cloud
+      gcloud auth configure-docker us-docker.pkg.dev
+      
+      # Set multiple variables
+      token=$(gcloud auth print-access-token) 
+      # project=$(gcloud config get-value project | head -n 1)
+      region="us-central1"
+      
+      # Write variables to a file
+      echo "token=${token}" >> /workspace/env_vars.txt
+      # echo "project=${project}" >> /workspace/env_vars.txt
+      echo "region=${region}" >> /workspace/env_vars.txt
 
-    # Authenticate using the service account key
-    # gcloud auth activate-service-account --key-file=/tmp/key.json
+- name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
+  entrypoint: 'sh'
+  args:
+    - '-c'
+    - |
 
-    # gcloud auth login
+      ls
 
-    # Deploy the Cloud Function
-    gcloud functions deploy helloWorld123 \
-      --runtime nodejs20 \
-      --trigger-http \
-      --allow-unauthenticated \
-      --region=us-central1 \
-      --source=cloudFunction \
-      --gen2 \
-      --entry-point=hey
+      # cat env.json
+      # cat env-test.json
+
+      # echo "project id -> $PROJECT_ID"
+      # echo "location -> $LOCATION"
+      # Load the variables
+      source /workspace/env_vars.txt
+      
+      # Run the integrationcli command
+      integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
+      integrationcli integrations list
+
+      # integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
+
+      integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --wait=true
+      integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --wait=true
+
+
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   entrypoint: 'bash'
+#   args:
+#   - '-c'
+#   - |
+#     # Fetch the service account key from Secret Manager
+#     # gcloud secrets versions access latest --secret=cloud-build-sa-key > /tmp/key.json
+
+#     # Authenticate using the service account key
+#     # gcloud auth activate-service-account --key-file=/tmp/key.json
+
+#     # gcloud auth login
+
+#     # Deploy the Cloud Function
+#     gcloud functions deploy helloWorld123 \
+#       --runtime nodejs20 \
+#       --trigger-http \
+#       --allow-unauthenticated \
+#       --region=us-central1 \
+#       --source=cloudFunction \
+#       --gen2 \
+#       --entry-point=hey
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
