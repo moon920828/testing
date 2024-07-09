@@ -62,7 +62,7 @@ steps:
 
       # integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
 
-      integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
+      # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
       integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
 
 
