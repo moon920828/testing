@@ -86,6 +86,8 @@ steps:
       --allow-unauthenticated \
       --region=us-central1 \
       --source=cloudFunction
+      --gen2
+      --entry-point=hey
 
 options:
   defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
