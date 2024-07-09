@@ -85,8 +85,8 @@ steps:
       --trigger-http \
       --allow-unauthenticated \
       --region=us-central1 \
-      --source=cloudFunction
-      --gen2
+      --source=cloudFunction \
+      --gen2 \
       --entry-point=hey
 
 options:
