@@ -1,7 +1,0 @@
-{
-  "displayName": "salesforce-instance",
-  "authConfigId": [
-    "cloudbuild-test-1"
-  ],
-  "ServiceAuthority": "freestar--wesley.sandbox.my.salesforce.com"
-}
