@@ -70,20 +70,19 @@ steps:
   args:
     - '-c'
     - |
-      if git diff --quiet HEAD^ HEAD -- cloudFunction/; then
-        export DEPLOY=false
+      if git diff --quiet HEAD^ HEAD -- cloud-function/; then
+        echo "CHANGES_DETECTED=false" >> /workspace/status.env
       else
-        export DEPLOY=true
+        echo "CHANGES_DETECTED=true" >> /workspace/status.env
       fi
-      echo "DEPLOY=$DEPLOY" > /workspace/deploy_flag
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'sh'
   args:
     - '-c'
     - |
-      source /workspace/deploy_flag
-      if [ "$DEPLOY" = "true" ]; then
+      source /workspace/status
+      if [ "$CHANGES_DETECTED" = "true" ]; then
         gcloud functions deploy helloWorld123 \
           --runtime nodejs20 \
           --trigger-http \
