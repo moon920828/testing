@@ -67,6 +67,37 @@ steps:
 
       integrationcli sfdcinstances list
 
+  - name: 'alpine'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        if git diff --quiet HEAD^ HEAD -- cloudFunction/; then
+          export DEPLOY=false
+        else
+          export DEPLOY=true
+        fi
+        echo "DEPLOY=$DEPLOY" > /workspace/deploy_flag
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        source /workspace/deploy_flag
+        if [ "$DEPLOY" = "true" ]; then
+          gcloud functions deploy helloWorld123 \
+            --runtime nodejs20 \
+            --trigger-http \
+            --allow-unauthenticated \
+            --region=us-central1 \
+            --source=cloudFunction \
+            --gen2 \
+            --entry-point=hey \
+            --service-account=application-integration-test@my-project-1553458465069.iam.gserviceaccount.com
+        else
+          echo "Skipping deployment as no changes detected in cloud-function folder."
+        fi
 
 # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #   entrypoint: 'bash'
