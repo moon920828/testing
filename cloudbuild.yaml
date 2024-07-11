@@ -22,79 +22,79 @@ steps:
 #   args: ['bash', './testing.sh']
 #   secretEnv: ['USERNAME', 'PASSWORD']
   
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   entrypoint: 'bash'
-#   args:
-#     - '-c'
-#     - |
-#       # Authenticate to Google Cloud
-#       gcloud auth configure-docker us-docker.pkg.dev
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      # Authenticate to Google Cloud
+      gcloud auth configure-docker us-docker.pkg.dev
       
-#       # Set multiple variables
-#       token=$(gcloud auth print-access-token) 
-#       # project=$(gcloud config get-value project | head -n 1)
-#       region="us-central1"
+      # Set multiple variables
+      token=$(gcloud auth print-access-token) 
+      # project=$(gcloud config get-value project | head -n 1)
+      region="us-central1"
       
-#       # Write variables to a file
-#       echo "token=${token}" >> /workspace/env_vars.txt
-#       # echo "project=${project}" >> /workspace/env_vars.txt
-#       echo "region=${region}" >> /workspace/env_vars.txt
+      # Write variables to a file
+      echo "token=${token}" >> /workspace/env_vars.txt
+      # echo "project=${project}" >> /workspace/env_vars.txt
+      echo "region=${region}" >> /workspace/env_vars.txt
 
-# - name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
+- name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
+  entrypoint: 'sh'
+  args:
+    - '-c'
+    - |
+
+      ls
+
+      # cat env.json
+      # cat env-test.json
+
+      # echo "project id -> $PROJECT_ID"
+      # echo "location -> $LOCATION"
+      # Load the variables
+      source /workspace/env_vars.txt
+      
+      # Run the integrationcli command
+      integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
+      # integrationcli integrations list
+
+      # integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
+
+      # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
+      integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
+
+# - name: 'gcr.io/cloud-builders/git'
 #   entrypoint: 'sh'
 #   args:
 #     - '-c'
 #     - |
+#       if git diff --quiet HEAD^ HEAD -- cloudFunction/; then
+#         echo "checking=false" >> /workspace/env_vars.txt
+#       else
+#         echo "checking=true" >> /workspace/env_vars.txt
+#       fi
 
-#       ls
-
-#       # cat env.json
-#       # cat env-test.json
-
-#       # echo "project id -> $PROJECT_ID"
-#       # echo "location -> $LOCATION"
-#       # Load the variables
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   entrypoint: 'sh'
+#   args:
+#     - '-c'
+#     - |
 #       source /workspace/env_vars.txt
-      
-#       # Run the integrationcli command
-#       integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
-#       # integrationcli integrations list
-
-#       # integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
-
-#       # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
-#       integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
-
-- name: 'gcr.io/cloud-builders/git'
-  entrypoint: 'sh'
-  args:
-    - '-c'
-    - |
-      if git diff --quiet HEAD^ HEAD -- cloudFunction/; then
-        echo "checking=false" >> /workspace/env_vars.txt
-      else
-        echo "checking=true" >> /workspace/env_vars.txt
-      fi
-
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'sh'
-  args:
-    - '-c'
-    - |
-      source /workspace/env_vars.txt
-      if [ "$checking" = "true" ]; then
-        gcloud functions deploy helloWorld123 \
-          --runtime nodejs20 \
-          --trigger-http \
-          --allow-unauthenticated \
-          --region=us-central1 \
-          --source=cloudFunction \
-          --gen2 \
-          --entry-point=hey \
-          --service-account=application-integration-test@my-project-1553458465069.iam.gserviceaccount.com
-      else
-        echo "Skipping deployment as no changes detected in cloud-function folder."
-      fi
+#       if [ "$checking" = "true" ]; then
+#         gcloud functions deploy helloWorld123 \
+#           --runtime nodejs20 \
+#           --trigger-http \
+#           --allow-unauthenticated \
+#           --region=us-central1 \
+#           --source=cloudFunction \
+#           --gen2 \
+#           --entry-point=hey \
+#           --service-account=application-integration-test@my-project-1553458465069.iam.gserviceaccount.com
+#       else
+#         echo "Skipping deployment as no changes detected in cloud-function folder."
+#       fi
 
 # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #   entrypoint: 'bash'
