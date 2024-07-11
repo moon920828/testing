@@ -71,9 +71,9 @@ steps:
     - '-c'
     - |
       if git diff --quiet HEAD^ HEAD -- cloud-function/; then
-        echo "CHANGES_DETECTED=false" >> /workspace/status.env
+        echo "checking=false" >> /workspace/status.env
       else
-        echo "CHANGES_DETECTED=true" >> /workspace/status.env
+        echo "checking=true" >> /workspace/status.env
       fi
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -82,7 +82,7 @@ steps:
     - '-c'
     - |
       source /workspace/status
-      if [ "$CHANGES_DETECTED" = "true" ]; then
+      if [ "$checking" = "true" ]; then
         gcloud functions deploy helloWorld123 \
           --runtime nodejs20 \
           --trigger-http \
