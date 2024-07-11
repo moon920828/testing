@@ -32,12 +32,10 @@ steps:
       
       # Set multiple variables
       token=$(gcloud auth print-access-token) 
-      # project=$(gcloud config get-value project | head -n 1)
       region="us-central1"
       
       # Write variables to a file
       echo "token=${token}" >> /workspace/env_vars.txt
-      # echo "project=${project}" >> /workspace/env_vars.txt
       echo "region=${region}" >> /workspace/env_vars.txt
 
 - name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
@@ -48,19 +46,12 @@ steps:
 
       ls
 
-      # cat env.json
-      # cat env-test.json
-
-      # echo "project id -> $PROJECT_ID"
-      # echo "location -> $LOCATION"
       # Load the variables
       source /workspace/env_vars.txt
       
       # Run the integrationcli command
       integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
       # integrationcli integrations list
-
-      # integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
 
       # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
       integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
