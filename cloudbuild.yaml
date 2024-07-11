@@ -58,37 +58,39 @@ steps:
       
       # Run the integrationcli command
       integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
-      integrationcli integrations list
+      # integrationcli integrations list
 
       # integrationcli integrations apply -f ./applicationIntegration -e dev --wait=true
 
       # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
       integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
 
+      integrationcli sfdcinstances list
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    # Fetch the service account key from Secret Manager
-    # gcloud secrets versions access latest --secret=cloud-build-sa-key > /tmp/key.json
 
-    # Authenticate using the service account key
-    # gcloud auth activate-service-account --key-file=/tmp/key.json
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   entrypoint: 'bash'
+#   args:
+#   - '-c'
+#   - |
+#     # Fetch the service account key from Secret Manager
+#     # gcloud secrets versions access latest --secret=cloud-build-sa-key > /tmp/key.json
 
-    # gcloud auth login
+#     # Authenticate using the service account key
+#     # gcloud auth activate-service-account --key-file=/tmp/key.json
 
-    # Deploy the Cloud Function
-    gcloud functions deploy helloWorld123 \
-      --runtime nodejs20 \
-      --trigger-http \
-      --allow-unauthenticated \
-      --region=us-central1 \
-      --source=cloudFunction \
-      --gen2 \
-      --entry-point=hey \
-      --service-account=application-integration-test@my-project-1553458465069.iam.gserviceaccount.com
+#     # gcloud auth login
+
+#     # Deploy the Cloud Function
+#     gcloud functions deploy helloWorld123 \
+#       --runtime nodejs20 \
+#       --trigger-http \
+#       --allow-unauthenticated \
+#       --region=us-central1 \
+#       --source=cloudFunction \
+#       --gen2 \
+#       --entry-point=hey \
+#       --service-account=application-integration-test@my-project-1553458465069.iam.gserviceaccount.com
 
 options:
   logging: CLOUD_LOGGING_ONLY
