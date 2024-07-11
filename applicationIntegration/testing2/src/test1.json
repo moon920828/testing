@@ -45,6 +45,5 @@
       },
       "displayName": "input_order_json",
       "jsonSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"billTo\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"zipCode\": {\n          \"type\": \"string\"\n        },\n        \"city\": {\n          \"type\": \"string\"\n        },\n        \"street\": {\n          \"type\": \"string\"\n        },\n        \"state\": {\n          \"type\": \"string\"\n        },\n        \"billToCode\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"orderNum\": {\n      \"type\": \"string\"\n    },\n    \"orderDate\": {\n      \"type\": \"string\"\n    },\n    \"shipTo\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"zipCode\": {\n          \"type\": \"string\"\n        },\n        \"city\": {\n          \"type\": \"string\"\n        },\n        \"street\": {\n          \"type\": \"string\"\n        },\n        \"shipToCode\": {\n          \"type\": \"string\"\n        },\n        \"state\": {\n          \"type\": \"string\"\n        }\n      }\n    }\n  }\n}"
-    }],
-    "lockHolder": ""
+    }]
   }
