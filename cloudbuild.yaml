@@ -31,16 +31,19 @@ steps:
 
 - id: 'step1'
   name: 'gcr.io/cloud-builders/gcloud'
-  args: ['bash', './scripts/step1.sh']
+  entrypoint: 'bash'
+  args: ['-c', './scripts/step1.sh']
 
 - id: 'step2'
   name: 'gcr.io/cloud-builders/gcloud'
-  args: ['bash', './scripts/step2.sh']
+  entrypoint: 'bash'
+  args: ['-c', './scripts/step2.sh']
   waitFor: ['step1']
 
 - id: 'step3'
   name: 'gcr.io/cloud-builders/gcloud'
-  args: ['bash', './scripts/step3.sh']
+  entrypoint: 'bash'
+  args: ['-c', './scripts/step3.sh']
   waitFor: ['step2']
   
 # - name: 'gcr.io/cloud-builders/gcloud'
