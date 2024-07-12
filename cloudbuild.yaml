@@ -18,43 +18,77 @@ steps:
 #   - 'PROJECT_ID=$PROJECT_ID'
 #   secretEnv: ['USERNAME', 'PASSWORD']
 
-# - name: 'ubuntu'
-#   args: ['bash', './testing.sh']
-#   secretEnv: ['USERNAME', 'PASSWORD']
-  
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args:
     - '-c'
-    - |
-      # Authenticate to Google Cloud
-      gcloud auth configure-docker us-docker.pkg.dev
+    - |      
+      # Generate the token and store it in a file
+      gcloud auth application-default print-access-token > /workspace/access_token.txt
       
-      # Set multiple variables
-      token=$(gcloud auth print-access-token) 
-      region="us-central1"
+      # Display the generated token (optional)
+      cat /workspace/access_token.txt
       
-      # Write variables to a file
-      echo "token=${token}" >> /workspace/env_vars.txt
-      echo "region=${region}" >> /workspace/env_vars.txt
+  volumes:
+    - name: 'workspace'
+      path: '/workspace'
 
-- name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
-  entrypoint: 'sh'
-  args:
-    - '-c'
-    - |
+- id: 'step1'
+  name: 'ubuntu'
+  args: ['bash', './step1.sh']
+  volumes:
+    - name: 'workspace'
+      path: '/workspace'
 
-      ls
+- id: 'step2'
+  name: 'ubuntu'
+  args: ['bash', './step2.sh']
+  waitFor: ['step1']
+  volumes:
+    - name: 'workspace'
+      path: '/workspace'
 
-      # Load the variables
-      source /workspace/env_vars.txt
+- id: 'step3'
+  name: 'ubuntu'
+  args: ['bash', './step3.sh']
+  waitFor: ['step2']
+  volumes:
+    - name: 'workspace'
+      path: '/workspace'
+  
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args:
+#     - '-c'
+#     - |
+#       # Authenticate to Google Cloud
+#       gcloud auth configure-docker us-docker.pkg.dev
       
-      # Run the integrationcli command
-      integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
-      # integrationcli integrations list
+#       # Set multiple variables
+#       token=$(gcloud auth print-access-token) 
+#       region="us-central1"
+      
+#       # Write variables to a file
+#       echo "token=${token}" >> /workspace/env_vars.txt
+#       echo "region=${region}" >> /workspace/env_vars.txt
 
-      # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
-      integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
+# - name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
+#   entrypoint: 'sh'
+#   args:
+#     - '-c'
+#     - |
+
+#       ls
+
+#       # Load the variables
+#       source /workspace/env_vars.txt
+      
+#       # Run the integrationcli command
+#       integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
+#       # integrationcli integrations list
+
+#       # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
+#       integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
 
 # - name: 'gcr.io/cloud-builders/git'
 #   entrypoint: 'sh'
