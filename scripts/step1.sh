@@ -16,9 +16,10 @@ AUTH_CONFIG_NAME="$AUTH_CONFIG/$NAME"
 API_URL="https://integrations.googleapis.com/v1"
 GET_API_URL="$API_URL/$AUTH_CONFIG_NAME"
 
-GET_RESPONSE=$(curl -s -X GET -H "Authorization: Bearer $ACCESS_TOKEN" "$GET_API_URL")
-RESPONSE_BODY=$(echo "$GET_RESPONSE" | sed '$d')
-RESPONSE_CODE=$(echo "$GET_RESPONSE" | tail -n1)
+RESPONSE=$(curl -s -w "%{http_code}" -H "Authorization: Bearer $ACCESS_TOKEN" "$GET_API_URL")
+
+RESPONSE_CODE=$(tail -n1 <<< "$RESPONSE")
+RESPONSE_BODY=$(sed '$ d' <<< "$RESPONSE")
 
 echo $RESPONSE_BODY
 echo $RESPONSE_CODE
@@ -28,23 +29,23 @@ if [ "$RESPONSE_CODE" -ne 200 ]; then
   exit 1
 fi
 
-name=$(echo "$RESPONSE_BODY" | awk -F '"' '/"name":/ {print $4}')
+BODY_NAME=$(echo "$RESPONSE_BODY" | awk -F '"' '/"name":/ {print $4}')
 
-if [ -z "$name" ]; then
+if [ -z "$BODY_NAME" ]; then
   echo "Error: 'name' not found in the response body JSON."
   exit 1
 fi
 
 # Extract the substring after the last '/' in the 'id' value
-authconfig_id=${id##*/}
+AUTH_CONFIG_ID=${BODY_NAME##*/}
 
-if [ -z "$authconfig_id" ]; then
-  echo "Error: 'authconfig_id' not found."
+if [ -z "$AUTH_CONFIG_ID" ]; then
+  echo "Error: 'AUTH_CONFIG_ID' not found."
   exit 1
 fi
 
 # Print extracted values
-echo "Authentication Config: $authconfig_id"
+echo "Authentication Config: $AUTH_CONFIG_ID"
 
-# Optionally, store the 'last_segment' value in a file
-echo "$authconfig_id" > /workspace/authconfig_id.txt
+# Optionally, store the 'AUTH_CONFIG_ID' value in a file
+echo "$AUTH_CONFIG_ID" > /workspace/authconfig_id.txt
