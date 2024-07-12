@@ -24,10 +24,22 @@ steps:
     - '-c'
     - |      
       # Generate the token and store it in a file
-      gcloud auth application-default print-access-token > /workspace/access_token.txt
+      # gcloud auth application-default print-access-token > /workspace/access_token.txt
+
+      # Set multiple variables
+      token=$(gcloud auth print-access-token) 
+      region="us-central1"
+      base_resource_name="projects/$PROJECT_ID/locations/$region"
+      api_url="https://integrations.googleapis.com/v1"
+      
+      # Write variables to a file
+      echo "token=${token}" >> /workspace/env_vars.txt
+      echo "region=${region}" >> /workspace/env_vars.txt
+      echo "base_resource_name=${base_resource_name}" >> /workspace/env_vars.txt
+      echo "api_url=${api_url}" >> /workspace/env_vars.txt
       
       # Display the generated token (optional)
-      cat /workspace/access_token.txt
+      cat /workspace/env_vars.txt
 
 - id: 'step1'
   name: 'gcr.io/cloud-builders/gcloud'

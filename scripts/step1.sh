@@ -5,18 +5,23 @@ echo '----------step1-----------'
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Authenticate and obtain access token
-ACCESS_TOKEN=$(cat /workspace/access_token.txt)
+# Load the variables
+source /workspace/env_vars.txt
+
+# Get access token
+# ACCESS_TOKEN=$(cat /workspace/access_token.txt)
 
 NAME="cloudbuild-test-1"
-AUTH_CONFIG="projects/my-project-1553458465069/locations/us-central1/authConfigs"
-AUTH_CONFIG_NAME="$AUTH_CONFIG/$NAME"
+# AUTH_CONFIG="projects/my-project-1553458465069/locations/us-central1/authConfigs"
+# AUTH_CONFIG_NAME="$AUTH_CONFIG/$NAME"
+AUTH_CONFIG_NAME="$base_resource_name/authConfigs/$NAME"
 
 # API URL
-API_URL="https://integrations.googleapis.com/v1"
-GET_API_URL="$API_URL/$AUTH_CONFIG_NAME"
+# API_URL="https://integrations.googleapis.com/v1"
+GET_API_URL="$api_url/$AUTH_CONFIG_NAME"
 
-RESPONSE=$(curl -s -w "%{http_code}" -H "Authorization: Bearer $ACCESS_TOKEN" "$GET_API_URL")
+# Get the exi
+RESPONSE=$(curl -s -w "%{http_code}" -H "Authorization: Bearer $token" "$GET_API_URL")
 
 RESPONSE_CODE=$(tail -n1 <<< "$RESPONSE")
 RESPONSE_BODY=$(sed '$ d' <<< "$RESPONSE")
