@@ -28,33 +28,20 @@ steps:
       
       # Display the generated token (optional)
       cat /workspace/access_token.txt
-      
-  volumes:
-    - name: 'workspace'
-      path: '/workspace'
 
 - id: 'step1'
   name: 'ubuntu'
   args: ['bash', './step1.sh']
-  volumes:
-    - name: 'workspace'
-      path: '/workspace'
 
 - id: 'step2'
   name: 'ubuntu'
   args: ['bash', './step2.sh']
   waitFor: ['step1']
-  volumes:
-    - name: 'workspace'
-      path: '/workspace'
 
 - id: 'step3'
   name: 'ubuntu'
   args: ['bash', './step3.sh']
   waitFor: ['step2']
-  volumes:
-    - name: 'workspace'
-      path: '/workspace'
   
 # - name: 'gcr.io/cloud-builders/gcloud'
 #   entrypoint: 'bash'
