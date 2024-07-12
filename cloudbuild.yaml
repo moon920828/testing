@@ -30,17 +30,17 @@ steps:
       cat /workspace/access_token.txt
 
 - id: 'step1'
-  name: 'ubuntu'
-  args: ['bash', './step1.sh']
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['bash', './scripts/step1.sh']
 
 - id: 'step2'
-  name: 'ubuntu'
-  args: ['bash', './step2.sh']
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['bash', './scripts/step2.sh']
   waitFor: ['step1']
 
 - id: 'step3'
-  name: 'ubuntu'
-  args: ['bash', './step3.sh']
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['bash', './scripts/step3.sh']
   waitFor: ['step2']
   
 # - name: 'gcr.io/cloud-builders/gcloud'
