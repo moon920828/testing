@@ -20,6 +20,9 @@ GET_RESPONSE=$(curl -s -X GET -H "Authorization: Bearer $ACCESS_TOKEN" "$GET_API
 RESPONSE_BODY=$(echo "$GET_RESPONSE" | sed '$d')
 RESPONSE_CODE=$(echo "$GET_RESPONSE" | tail -n1)
 
+echo $RESPONSE_BODY
+echo $RESPONSE_CODE
+
 if [ "$RESPONSE_CODE" -ne 200 ]; then
   echo "Error: Received response code $RESPONSE_CODE from $GET_API_URL"
   exit 1
