@@ -1,3 +1,6 @@
+const fs = require('fs').promises;
+const path = require('path');
+
 console.log(process.env)
 
 const envFile = '/workspace/env_vars.txt';
