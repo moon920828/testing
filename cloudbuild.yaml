@@ -80,23 +80,23 @@ steps:
 #       echo "token=${token}" >> /workspace/env_vars.txt
 #       echo "region=${region}" >> /workspace/env_vars.txt
 
-# - name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
-#   entrypoint: 'sh'
-#   args:
-#     - '-c'
-#     - |
+- name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
+  entrypoint: 'sh'
+  args:
+    - '-c'
+    - |
 
-#       ls
+      ls
 
-#       # Load the variables
-#       source /workspace/env_vars.txt
+      # Load the variables
+      source /workspace/env_vars.txt
       
-#       # Run the integrationcli command
-#       integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
-#       # integrationcli integrations list
+      # Run the integrationcli command
+      integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
+      # integrationcli integrations list
 
-#       # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
-#       integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
+      # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
+      integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
 
 # - name: 'gcr.io/cloud-builders/git'
 #   entrypoint: 'sh'
