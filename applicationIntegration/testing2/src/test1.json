@@ -25,6 +25,21 @@
       "triggerType": "SFDC_CHANNEL",
       "triggerNumber": "2",
       "triggerId": "sfdc_channel_trigger/wonderful123123/test_1__e/unused/pe"
+    },
+    {
+      "label": "testing label",
+      "startTasks": [{
+        "taskId": "1"
+      }],
+      "properties": {
+        "Event type": "pe",
+        "SFDC instance name": "wonderful123123",
+        "Channel name": "test_2__e",
+        "Operation": "unused"
+      },
+      "triggerType": "SFDC_CHANNEL",
+      "triggerNumber": "2",
+      "triggerId": "sfdc_channel_trigger/wonderful123123/test_2__e/unused/pe"
     }
   ],
     "taskConfigs": [{
