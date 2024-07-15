@@ -152,7 +152,7 @@ function parseEnvVars(data) {
 // Main function to orchestrate the process
 async function main() {
     try {
-        const PARENT_DIR = 'testing/sfdc'; // Replace with your actual parent directory path
+        const PARENT_DIR = 'applicationIntegration/sfdc'; // Replace with your actual parent directory path
 
         // Fetch environment variables from file
         const envVars = await getEnvVariables('/workspace/env_vars.txt');
