@@ -4,14 +4,6 @@
     "authConfigId": [
       "440d99fb-c8ce-4909-bbdb-30881313dcea"
     ],
-    "serviceAuthority": "freestar--wesley.sandbox.my.salesforce.com",
-    "channels": [
-      {
-
-      },
-      {
-        
-      }
-    ]
+    "serviceAuthority": "freestar--wesley.sandbox.my.salesforce.com"
 }
   
