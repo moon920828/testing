@@ -42,8 +42,9 @@ steps:
       # Display the generated token (optional)
       cat /workspace/env_vars.txt
 
-- name: 'node'
-  args: ['node', './scripts/testing.js']
+- name: 'gcr.io/cloud-builders/npm'
+  entrypoint: 'node'
+  args: ['./scripts/testing.js.js']
 
 # - id: 'step1'
 #   name: 'gcr.io/cloud-builders/gcloud'
