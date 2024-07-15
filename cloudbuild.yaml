@@ -31,6 +31,7 @@ steps:
       region="us-central1"
       base_resource_name="projects/$PROJECT_ID/locations/$region"
       api_url="https://integrations.googleapis.com/v1"
+      base_api_url="https://integrations.googleapis.com/v1/$base_resource_name"
       
       # Write variables to a file
       echo "token=${token}" >> /workspace/env_vars.txt
@@ -41,22 +42,25 @@ steps:
       # Display the generated token (optional)
       cat /workspace/env_vars.txt
 
-- id: 'step1'
-  name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args: ['./scripts/step1.sh']
+- name: 'node'
+  args: ['node', './scripts/testing.js']
 
-- id: 'step2'
-  name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args: ['./scripts/step2.sh']
-  waitFor: ['step1']
+# - id: 'step1'
+#   name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args: ['./scripts/step1.sh']
 
-- id: 'step3'
-  name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args: ['./scripts/step3.sh']
-  waitFor: ['step2']
+# - id: 'step2'
+#   name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args: ['./scripts/step2.sh']
+#   waitFor: ['step1']
+
+# - id: 'step3'
+#   name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args: ['./scripts/step3.sh']
+#   waitFor: ['step2']
   
 # - name: 'gcr.io/cloud-builders/gcloud'
 #   entrypoint: 'bash'

@@ -11,17 +11,18 @@ source /workspace/env_vars.txt
 # Get access token
 # ACCESS_TOKEN=$(cat /workspace/access_token.txt)
 
-NAME="cloudbuild-test-1"
+NAME="testing-auth-sandbox"
 # AUTH_CONFIG="projects/my-project-1553458465069/locations/us-central1/authConfigs"
 # AUTH_CONFIG_NAME="$AUTH_CONFIG/$NAME"
-AUTH_CONFIG_NAME="$base_resource_name/authConfigs/$NAME"
+# AUTH_CONFIG_NAME="$base_resource_name/authConfigs/$NAME"
 
 # API URL
 # API_URL="https://integrations.googleapis.com/v1"
-GET_API_URL="$api_url/$AUTH_CONFIG_NAME"
+# GET_API_URL="$api_url/$AUTH_CONFIG_NAME"
+URL="$base_api_url/authConfigs/$NAME"
 
 # Get the exi
-RESPONSE=$(curl -s -w "%{http_code}" -H "Authorization: Bearer $token" "$GET_API_URL")
+RESPONSE=$(curl -s -w "%{http_code}" -H "Authorization: Bearer $token" "$URL")
 
 RESPONSE_CODE=$(tail -n1 <<< "$RESPONSE")
 RESPONSE_BODY=$(sed '$ d' <<< "$RESPONSE")
@@ -30,7 +31,7 @@ echo $RESPONSE_BODY
 echo $RESPONSE_CODE
 
 if [ "$RESPONSE_CODE" -ne 200 ]; then
-  echo "Error: Received response code $RESPONSE_CODE from $GET_API_URL"
+  echo "Error: Received response code $RESPONSE_CODE from $URL"
   exit 1
 fi
 
@@ -53,4 +54,5 @@ fi
 echo "Authentication Config: $AUTH_CONFIG_ID"
 
 # Optionally, store the 'AUTH_CONFIG_ID' value in a file
-echo "$AUTH_CONFIG_ID" > /workspace/authconfig_id.txt
+# echo "$AUTH_CONFIG_ID" > /workspace/authconfig_id.txt
+echo "auth_config_id=${AUTH_CONFIG_ID}" >> /workspace/env_vars.txt

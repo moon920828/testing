@@ -9,3 +9,5 @@ set -e
 source /workspace/env_vars.txt
 
 echo $token
+
+# URL="$base_api_url/sfdcInstances/$NAME"
