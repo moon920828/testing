@@ -1,8 +1,25 @@
 const fs = require('fs').promises;
 const path = require('path');
+const fetch = require('node-fetch'); // Import fetch for making HTTP requests
 
-// Function to fetch new ID from an endpoint
-async function fetchNewId(endpoint, data, token) {
+// Function to fetch data from an endpoint using GET method
+async function getData(endpoint, token) {
+    try {
+        const response = await fetch(endpoint, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return await response.json();
+    } catch (error) {
+        console.error(`Error fetching data from ${endpoint}:`, error);
+        throw error;
+    }
+}
+
+// Function to fetch data from an endpoint using POST method
+async function postData(endpoint, data, token, name) {
     try {
         const response = await fetch(endpoint, {
             method: 'POST',
@@ -13,30 +30,10 @@ async function fetchNewId(endpoint, data, token) {
             body: JSON.stringify(data)
         });
         const responseData = await response.json();
-        return responseData.id || null;
+        console.log(`New ${name} Created: ${responseData.name}.`);
+        return responseData.name || null;
     } catch (error) {
-        console.error('Error fetching new ID:', error);
-        throw error;
-    }
-}
-
-async function getId(endpoint, token) {
-    try {
-        const response = await fetch(endpoint, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-
-        const responseData = await response.json();
-
-        // Extract the substring after the last '/' in the 'id' value
-        return responseData.name.substring(responseData.name.lastIndexOf('/') + 1)
-
-
-    } catch (error) {
-        console.error('Error fetching new ID:', error);
+        console.error(`Error posting data to ${endpoint}:`, error);
         throw error;
     }
 }
@@ -58,33 +55,35 @@ async function processJsonFiles(folder, id, base_api_url, token) {
         }
     } catch (error) {
         console.error(`Error reading directory ${folder}:`, error);
-        throw error
+        throw error;
     }
 }
 
 // Function to process a single JSON file
 async function processJsonFile(filePath, id, base_api_url, token) {
     try {
+        const stat = await fs.stat(filePath);
+        if (stat.isDirectory()) {
+            console.log(`${filePath} is a directory. Skipping...`);
+            return;
+        }
+
         console.log(`Processing JSON file: ${filePath}`);
+        const CHANNELS_API_ENDPOINT = `${base_api_url}/sfdcInstances/${id}/sfdcChannels`;
         const data = JSON.parse(await fs.readFile(filePath, 'utf8'));
 
-        if (data.id) {
-            console.log('Channel is already created...');
-        } else {
-            const endpoint = `${base_api_url}/sfdcInstances/${id}/sfdcChannels`;
-            const newId = await fetchNewId(endpoint, data, token);
+        // Fetch sfdcChannels data
+        const { sfdcChannels } = await getData(CHANNELS_API_ENDPOINT, token);
+        const channel = sfdcChannels.find(i => i.displayName === data.displayName);
 
-            if (newId) {
-                console.log(`New ID received: ${newId}. Updating JSON file...`);
-                data.id = newId.substring(newId.lastIndexOf('/') + 1);
-                await fs.writeFile(filePath, JSON.stringify(data, null, 2));
-            } else {
-                console.error('Error: Failed to get a new ID from the POST request.');
-            }
+        if (channel) {
+            console.log('Channel already exists...');
+        } else {
+            await postData(CHANNELS_API_ENDPOINT, data, token, 'channel');
         }
     } catch (error) {
         console.error(`Error processing JSON file ${filePath}:`, error);
-        throw error
+        throw error;
     }
 }
 
@@ -96,27 +95,30 @@ async function checkSingleJsonFile(parentFolder, AUTH_CONFIG_ID, endpoint, token
 
         if (!jsonFile) {
             console.error(`Error: No JSON file found in ${parentFolder}.`);
-            return null;
+            process.exit(1);
         }
 
         const filePath = path.join(parentFolder, jsonFile);
         const data = JSON.parse(await fs.readFile(filePath, 'utf8'));
 
-        if (data.id) {
-            return data.id;
-        } else {
-            console.log('No ID found in the JSON file. Making a POST request to get an ID...');
-            data.authConfigId = [AUTH_CONFIG_ID];
-            const newId = await fetchNewId(endpoint, data, token);
+        // Fetch sfdcInstances data
+        const { sfdcInstances } = await getData(endpoint, token);
+        const instance = sfdcInstances.find(i => i.displayName === data.displayName);
 
-            if (newId) {
-                console.log(`New ID received: ${newId}. Updating JSON file...`);
-                data.id = newId;
-                await fs.writeFile(filePath, JSON.stringify(data, null, 2));
-                return newId;
+        if (instance) {
+            const name = instance.name || '';
+            return name.substring(name.lastIndexOf('/') + 1);
+        } else {
+            console.log('No ID found in the sfdcInstances. Making a POST request to get an ID...');
+            data.authConfigId = [AUTH_CONFIG_ID];
+            const name = await postData(endpoint, data, token, 'instance');
+
+            if (name) {
+                console.log(`New Instance Created: ${name}.`);
+                return name.substring(name.lastIndexOf('/') + 1);
             } else {
-                console.error('Error: Failed to get a new ID from the POST request.');
-                return null;
+                console.error('Error: Failed to create a new instance from the POST request.');
+                process.exit(1);
             }
         }
     } catch (error) {
@@ -125,17 +127,18 @@ async function checkSingleJsonFile(parentFolder, AUTH_CONFIG_ID, endpoint, token
     }
 }
 
+// Function to get environment variables from a file
 async function getEnvVariables(filePath) {
     try {
-        // Read environment variables from file
         const envVarsData = await fs.readFile(filePath, 'utf8');
         return parseEnvVars(envVarsData);
     } catch (error) {
         console.error('Error reading environment variables:', error);
-        throw error; // Re-throw the error to handle it in the caller function
+        throw error;
     }
 }
 
+// Helper function to parse environment variables from data
 function parseEnvVars(data) {
     const lines = data.split('\n');
     const parsedVars = {};
@@ -147,41 +150,33 @@ function parseEnvVars(data) {
     return parsedVars;
 }
 
+// Main function to orchestrate the process
 async function main() {
     try {
-        const PARENT_DIR = 'applicationIntegration/sfdc';
+        const PARENT_DIR = 'testing/sfdc'; // Replace with your actual parent directory path
 
-        // Fetch environment variables
-        const envVars = await getEnvVariables(PARENT_DIR);
+        // Fetch environment variables from file
+        const envVars = await getEnvVariables('/workspace/env_vars.txt');
 
         // Destructure environment variables
-        const {
-            base_api_url,
-            token,
-        } = envVars;
+        const { base_api_url, token } = envVars;
 
-        // Define constants and URLs
-        const NAME = "testing-auth-sandbox";
-        const GET_AUTH_CONFIG_URL = `${base_api_url}/authConfigs/${NAME}`;
-        const INSTANCE_API_ENDPOINT = `${base_api_url}/sfdcInstances`;
+        // Define AUTH_CONFIG_ID endpoint
+        const GET_AUTH_CONFIG_URL = `${base_api_url}/authConfigs/testing-auth-sandbox`;
+        const response = await getData(GET_AUTH_CONFIG_URL, token);
+        const { name } = response;
+        const AUTH_CONFIG_ID = name.substring(name.lastIndexOf('/') + 1);
 
-
-        // Fetch AUTH_CONFIG_ID
-        const AUTH_CONFIG_ID = await getId(GET_AUTH_CONFIG_URL, token);
-
-        if (AUTH_CONFIG_ID) {
-            // Iterate through folders in PARENT_DIR
-            const folders = await fs.readdir(PARENT_DIR);
-            for (const folder of folders) {
-                const folderPath = path.join(PARENT_DIR, folder);
-                const stat = await fs.stat(folderPath);
-                if (stat.isDirectory()) {
-                    // Check JSON files in each folder and process
-                    const id = await checkSingleJsonFile(folderPath, AUTH_CONFIG_ID, INSTANCE_API_ENDPOINT, token);
-                    if (id) {
-                        console.log(`Processing channel in folder ${folderPath} with ID ${id}.`);
-                        await processJsonFiles(path.join(folderPath, 'channels'), id, base_api_url, token);
-                    }
+        // Process each folder in PARENT_DIR
+        const folders = await fs.readdir(PARENT_DIR);
+        for (const folder of folders) {
+            const folderPath = path.join(PARENT_DIR, folder);
+            const stat = await fs.stat(folderPath);
+            if (stat.isDirectory()) {
+                const id = await checkSingleJsonFile(folderPath, AUTH_CONFIG_ID, INSTANCE_API_ENDPOINT, token);
+                if (id) {
+                    console.log(`Processing channel in folder ${folderPath} with ID ${id}.`);
+                    await processJsonFiles(path.join(folderPath, 'channels'), id, base_api_url, token);
                 }
             }
         }
@@ -191,4 +186,5 @@ async function main() {
     }
 }
 
+// Execute the main function
 main();
