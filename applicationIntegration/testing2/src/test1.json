@@ -38,7 +38,7 @@
         "Operation": "unused"
       },
       "triggerType": "SFDC_CHANNEL",
-      "triggerNumber": "2",
+      "triggerNumber": "3",
       "triggerId": "sfdc_channel_trigger/wonderful123123/test_2__e/unused/pe"
     }
   ],
