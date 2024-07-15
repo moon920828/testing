@@ -38,6 +38,7 @@ steps:
       echo "region=${region}" >> /workspace/env_vars.txt
       echo "base_resource_name=${base_resource_name}" >> /workspace/env_vars.txt
       echo "api_url=${api_url}" >> /workspace/env_vars.txt
+      echo "base_api_url=${base_api_url}" >> /workspace/env_vars.txt
       
       # Display the generated token (optional)
       cat /workspace/env_vars.txt
