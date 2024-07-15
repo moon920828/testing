@@ -54,7 +54,7 @@ async function processJsonFiles(folder, id, base_api_url, token) {
         }
     } catch (error) {
         console.error(`Error reading directory ${folder}:`, error);
-        throw error;
+        return null;
     }
 }
 
@@ -114,7 +114,6 @@ async function checkSingleJsonFile(parentFolder, AUTH_CONFIG_ID, base_api_url, t
             const name = await postData(INSTANCE_API_ENDPOINT, data, token, 'instance');
 
             if (name) {
-                console.log(`New Instance Created: ${name}.`);
                 return name.substring(name.lastIndexOf('/') + 1);
             } else {
                 console.error('Error: Failed to create a new instance from the POST request.');
