@@ -87,7 +87,7 @@ async function processJsonFile(filePath, id, base_api_url, token) {
 }
 
 // Function to check a single JSON file in the parent folder
-async function checkSingleJsonFile(parentFolder, AUTH_CONFIG_ID, endpoint, token) {
+async function checkSingleJsonFile(parentFolder, AUTH_CONFIG_ID, base_api_url, token) {
     try {
         const files = await fs.readdir(parentFolder);
         const jsonFile = files.find(file => file.endsWith('.json'));
@@ -97,11 +97,12 @@ async function checkSingleJsonFile(parentFolder, AUTH_CONFIG_ID, endpoint, token
             process.exit(1);
         }
 
+        const INSTANCE_API_ENDPOINT = `${base_api_url}/sfdcInstances`;
         const filePath = path.join(parentFolder, jsonFile);
         const data = JSON.parse(await fs.readFile(filePath, 'utf8'));
 
         // Fetch sfdcInstances data
-        const { sfdcInstances } = await getData(endpoint, token);
+        const { sfdcInstances } = await getData(INSTANCE_API_ENDPOINT, token);
         const instance = sfdcInstances.find(i => i.displayName === data.displayName);
 
         if (instance) {
@@ -110,7 +111,7 @@ async function checkSingleJsonFile(parentFolder, AUTH_CONFIG_ID, endpoint, token
         } else {
             console.log('No ID found in the sfdcInstances. Making a POST request to get an ID...');
             data.authConfigId = [AUTH_CONFIG_ID];
-            const name = await postData(endpoint, data, token, 'instance');
+            const name = await postData(INSTANCE_API_ENDPOINT, data, token, 'instance');
 
             if (name) {
                 console.log(`New Instance Created: ${name}.`);
@@ -172,7 +173,7 @@ async function main() {
             const folderPath = path.join(PARENT_DIR, folder);
             const stat = await fs.stat(folderPath);
             if (stat.isDirectory()) {
-                const id = await checkSingleJsonFile(folderPath, AUTH_CONFIG_ID, INSTANCE_API_ENDPOINT, token);
+                const id = await checkSingleJsonFile(folderPath, AUTH_CONFIG_ID, base_api_url, token);
                 if (id) {
                     console.log(`Processing channel in folder ${folderPath} with ID ${id}.`);
                     await processJsonFiles(path.join(folderPath, 'channels'), id, base_api_url, token);
