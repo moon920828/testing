@@ -1,6 +1,5 @@
 const fs = require('fs').promises;
 const path = require('path');
-const fetch = require('node-fetch'); // Import fetch for making HTTP requests
 
 // Function to fetch data from an endpoint using GET method
 async function getData(endpoint, token) {
