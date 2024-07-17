@@ -103,9 +103,13 @@ async function checkSingleJsonFile(parentFolder, AUTH_CONFIG_ID, base_api_url, t
 
         // Fetch sfdcInstances data
         const { sfdcInstances } = await getData(INSTANCE_API_ENDPOINT, token);
+
+        console.log('Existing sfdc instances', sfdcInstances)
+
         const instance = sfdcInstances.find(i => i.displayName === data.displayName);
 
         if (instance) {
+            console.log('Instance already exists...', instance);
             const name = instance.name || '';
             return name.substring(name.lastIndexOf('/') + 1);
         } else {
