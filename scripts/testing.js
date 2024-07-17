@@ -166,6 +166,8 @@ async function main() {
         const { name } = response;
         const AUTH_CONFIG_ID = name.substring(name.lastIndexOf('/') + 1);
 
+        console.log('authconfig', AUTH_CONFIG_ID)
+
         // Process each folder in PARENT_DIR
         const folders = await fs.readdir(PARENT_DIR);
         for (const folder of folders) {
