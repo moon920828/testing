@@ -48,13 +48,13 @@
       }],
       "properties": {
         "Event type": "pe",
-        "SFDC instance name": "test-1",
-        "Channel name": "test_2-1__e",
+        "SFDC instance name": "test-3",
+        "Channel name": "test_3__e",
         "Operation": "unused"
       },
       "triggerType": "SFDC_CHANNEL",
       "triggerNumber": "4",
-      "triggerId": "sfdc_channel_trigger/test-1/test_2-1__e/unused/pe"
+      "triggerId": "sfdc_channel_trigger/test-3/test_3__e/unused/pe"
     }
   ],
     "taskConfigs": [{
