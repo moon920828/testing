@@ -47,7 +47,9 @@ async function processJsonFiles(folder, id, base_api_url, token) {
             console.log(`JSON files found in ${folder}:`);
             const CHANNELS_API_ENDPOINT = `${base_api_url}/sfdcInstances/${id}/sfdcChannels`;
             // Fetch sfdcChannels data
-            const { sfdcChannels } = await getData(CHANNELS_API_ENDPOINT, token) ?? { sfdcChannels: [] };
+            const { sfdcChannels } = await getData(CHANNELS_API_ENDPOINT, token);
+
+            console.log('sfdc channel ---- ', sfdcChannels)
 
             for (const file of jsonFiles) {
                 const filePath = path.join(folder, file);
@@ -63,7 +65,7 @@ async function processJsonFiles(folder, id, base_api_url, token) {
 }
 
 // Function to process a single JSON file
-async function processJsonFile(filePath, CHANNELS_API_ENDPOINT, token, sfdcChannels) {
+async function processJsonFile(filePath, CHANNELS_API_ENDPOINT, token, sfdcChannels = []) {
     try {
         const stat = await fs.stat(filePath);
         if (stat.isDirectory()) {
