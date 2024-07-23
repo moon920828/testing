@@ -18,34 +18,48 @@ steps:
 #   - 'PROJECT_ID=$PROJECT_ID'
 #   secretEnv: ['USERNAME', 'PASSWORD']
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   args:
-    - '-c'
-    - |      
-      # Generate the token and store it in a file
-      # gcloud auth application-default print-access-token > /workspace/access_token.txt
+    - gcloud
+    - functions
+    - deploy
+    - helloWorld123
+    - --region=us-central1
+    - --source=cloudFunction
+    - --trigger-http
+    - --runtime=nodejs20
+    - --service-account=$_TESTING_VARIABLE
+    - --entry-point=hey
+    - --gen2
 
-      # Set multiple variables
-      token=$(gcloud auth print-access-token) 
-      region="us-central1"
-      base_resource_name="projects/$PROJECT_ID/locations/$region"
-      api_url="https://integrations.googleapis.com/v1"
-      base_api_url="https://integrations.googleapis.com/v1/$base_resource_name"
-      
-      # Write variables to a file
-      echo "token=${token}" >> /workspace/env_vars.txt
-      echo "region=${region}" >> /workspace/env_vars.txt
-      echo "base_resource_name=${base_resource_name}" >> /workspace/env_vars.txt
-      echo "api_url=${api_url}" >> /workspace/env_vars.txt
-      echo "base_api_url=${base_api_url}" >> /workspace/env_vars.txt
-      
-      # Display the generated token (optional)
-      cat /workspace/env_vars.txt
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args:
+#     - '-c'
+#     - |      
+#       # Generate the token and store it in a file
+#       # gcloud auth application-default print-access-token > /workspace/access_token.txt
 
-- name: 'gcr.io/cloud-builders/npm'
-  entrypoint: 'node'
-  args: ['./scripts/testing.js']
+#       # Set multiple variables
+#       token=$(gcloud auth print-access-token) 
+#       region="us-central1"
+#       base_resource_name="projects/$PROJECT_ID/locations/$region"
+#       api_url="https://integrations.googleapis.com/v1"
+#       base_api_url="https://integrations.googleapis.com/v1/$base_resource_name"
+      
+#       # Write variables to a file
+#       echo "token=${token}" >> /workspace/env_vars.txt
+#       echo "region=${region}" >> /workspace/env_vars.txt
+#       echo "base_resource_name=${base_resource_name}" >> /workspace/env_vars.txt
+#       echo "api_url=${api_url}" >> /workspace/env_vars.txt
+#       echo "base_api_url=${base_api_url}" >> /workspace/env_vars.txt
+      
+#       # Display the generated token (optional)
+#       cat /workspace/env_vars.txt
+
+# - name: 'gcr.io/cloud-builders/npm'
+#   entrypoint: 'node'
+#   args: ['./scripts/testing.js']
 
 # - id: 'step1'
 #   name: 'gcr.io/cloud-builders/gcloud'
@@ -80,23 +94,23 @@ steps:
 #       echo "token=${token}" >> /workspace/env_vars.txt
 #       echo "region=${region}" >> /workspace/env_vars.txt
 
-- name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
-  entrypoint: 'sh'
-  args:
-    - '-c'
-    - |
+# - name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
+#   entrypoint: 'sh'
+#   args:
+#     - '-c'
+#     - |
 
-      ls
+#       ls
 
-      # Load the variables
-      source /workspace/env_vars.txt
+#       # Load the variables
+#       source /workspace/env_vars.txt
       
-      # Run the integrationcli command
-      integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
-      # integrationcli integrations list
+#       # Run the integrationcli command
+#       integrationcli prefs set -p "$PROJECT_ID" -r "$region" -t "$token" 
+#       # integrationcli integrations list
 
-      # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
-      integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
+#       # integrationcli integrations apply -f ./applicationIntegration/testing1 -e dev --verbose --wait=true
+#       integrationcli integrations apply -f ./applicationIntegration/testing2 -e dev --verbose --wait=true
 
 # - name: 'gcr.io/cloud-builders/git'
 #   entrypoint: 'sh'
