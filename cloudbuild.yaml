@@ -4,15 +4,15 @@ steps:
   args:
   - '-c'
   - |
-    export VAR1=value1
-    export VAR2=value2
+    export VAR1=DATABASE_PERSISTENCE_POLICY_UNSPECIFIED
+    export VAR2=INFO
 
     apt-get update && apt-get -y install gettext-base
-    envsubst < scripts/helloworld.json > temp.json
+    envsubst < applicationIntegration/testing1/overrides.json > temp.json
 
-    mv temp.json /workspace/salesforce-listener-auth-config.json
+    mv temp.json /workspace/applicationIntegration/testing1/overrides.json
     
-    cat /workspace/salesforce-listener-auth-config.json
+    cat /workspace/applicationIntegration/testing1/overrides.json
 
     ls
 
@@ -23,6 +23,8 @@ steps:
     - |
 
       ls
+
+      cat applicationIntegration/testing1/overrides.json
 
 # - name: 'gcr.io/cloud-builders/gcloud'
 #   entrypoint: 'bash'
