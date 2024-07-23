@@ -10,9 +10,9 @@ steps:
     apt-get update && apt-get -y install gettext-base
     envsubst < applicationIntegration/testing1/overrides.json > temp.json
 
-    mv temp.json /workspace/applicationIntegration/testing1/dev/overrides.json
+    mv temp.json /workspace/applicationIntegration/testing1/dev/overrides/overrides.json
     
-    cat /workspace/applicationIntegration/testing1/dev/overrides.json
+    cat /workspace/applicationIntegration/testing1/dev/overrides/overrides.json
 
     ls
 
@@ -24,7 +24,7 @@ steps:
 
       ls
 
-      cat applicationIntegration/testing1/dev/overrides.json
+      cat applicationIntegration/testing1/dev/overrides/overrides.json
 
 # - name: 'gcr.io/cloud-builders/gcloud'
 #   entrypoint: 'bash'
