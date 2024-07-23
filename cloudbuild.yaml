@@ -7,6 +7,8 @@ steps:
     export VAR1=DATABASE_PERSISTENCE_POLICY_UNSPECIFIED
     export VAR2=INFO
 
+    cat applicationIntegration/testing1/dev/overrides/overrides.json
+
     apt-get update && apt-get -y install gettext-base
     envsubst < applicationIntegration/testing1/dev/overrides/overrides.json > temp.json
 
