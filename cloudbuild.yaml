@@ -1,4 +1,19 @@
 steps:
+- name: 'alpine'
+  entrypoint: 'sh'
+  args:
+  - '-c'
+  - |
+    export VAR1=value1
+    export VAR2=value2
+
+    apt-get update && apt-get -y install gettext-base
+    envsubst < scripts/helloworld.json > temp.json
+
+    mv temp.json /workspace/salesforce-listener-auth-config.json
+    
+    cat /workspace/salesforce-listener-auth-config.json
+
 # - name: 'gcr.io/cloud-builders/gcloud'
 #   entrypoint: 'bash'
 #   args:
@@ -18,19 +33,19 @@ steps:
 #   - 'PROJECT_ID=$PROJECT_ID'
 #   secretEnv: ['USERNAME', 'PASSWORD']
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  args:
-    - gcloud
-    - functions
-    - deploy
-    - helloWorld123
-    - --region=us-central1
-    - --source=cloudFunction
-    - --trigger-http
-    - --runtime=nodejs20
-    - --service-account=$_TESTING_VARIABLE
-    - --entry-point=hey
-    - --gen2
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   args:
+#     - gcloud
+#     - functions
+#     - deploy
+#     - helloWorld123
+#     - --region=us-central1
+#     - --source=cloudFunction
+#     - --trigger-http
+#     - --runtime=nodejs20
+#     - --service-account=$_TESTING_VARIABLE
+#     - --entry-point=hey
+#     - --gen2
 
 # - name: 'gcr.io/cloud-builders/gcloud'
 #   entrypoint: 'bash'
