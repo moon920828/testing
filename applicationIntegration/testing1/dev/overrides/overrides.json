@@ -1,10 +1,10 @@
 {
-    "integration_overrides": {
-      "databasePersistencePolicy": "DATABASE_PERSISTENCE_POLICY_UNSPECIFIED",
-      "enableVariableMasking": true,
-      "cloudLoggingDetails": {
-        "cloudLoggingSeverity": "INFO",
-        "enableCloudLogging": true
-      }
+  "integration_overrides": {
+    "databasePersistencePolicy": "$VAR1",
+    "enableVariableMasking": true,
+    "cloudLoggingDetails": {
+      "cloudLoggingSeverity": "$VAR2",
+      "enableCloudLogging": true
     }
   }
+}
