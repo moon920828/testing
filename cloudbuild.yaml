@@ -24,7 +24,15 @@ steps:
 
       ls
 
-      cat applicationIntegration/testing1/overrides.json
+      cd applicationIntegraion
+
+      ls
+
+      cd testing1
+
+      ls
+
+      cat overrides.json
 
 # - name: 'gcr.io/cloud-builders/gcloud'
 #   entrypoint: 'bash'
