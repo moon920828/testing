@@ -10,6 +10,8 @@ steps:
     apt-get update && apt-get -y install gettext-base
     envsubst < workspace/applicationIntegration/testing1/dev/overrides/overrides.json > temp.json
 
+    cat temp.json
+
     mv temp.json /workspace/applicationIntegration/testing1/dev/overrides/overrides.json
     
     cat /workspace/applicationIntegration/testing1/dev/overrides/overrides.json
