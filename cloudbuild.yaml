@@ -24,13 +24,7 @@ steps:
 
       ls
 
-      cd applicationIntegration
-
-      ls
-
-      cd testing1
-
-      ls
+      cd applicationIntegration/testing
 
       cat overrides.json
 
