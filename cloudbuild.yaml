@@ -8,7 +8,7 @@ steps:
     export VAR2=INFO
 
     apt-get update && apt-get -y install gettext-base
-    envsubst < workspace/applicationIntegration/testing1/dev/overrides/overrides.json > temp.json
+    envsubst < applicationIntegration/testing1/dev/overrides/overrides.json > temp.json
 
     cat temp.json
 
