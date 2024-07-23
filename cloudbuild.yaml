@@ -24,7 +24,7 @@ steps:
 
       ls
 
-      cd applicationIntegraion
+      cd applicationIntegration
 
       ls
 
