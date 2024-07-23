@@ -1,4 +1,6 @@
 {
     "hello": "${VAR1}",
-    "world": "${VAR2}"
+    "world": "${VAR2}",
+    "test1": "$VAR1",
+    "test2": "$VAR2"
 }

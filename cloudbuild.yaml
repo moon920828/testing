@@ -14,6 +14,16 @@ steps:
     
     cat /workspace/salesforce-listener-auth-config.json
 
+    ls
+
+- name: 'us-docker.pkg.dev/appintegration-toolkit/images/integrationcli:latest'
+  entrypoint: 'sh'
+  args:
+    - '-c'
+    - |
+
+      ls
+
 # - name: 'gcr.io/cloud-builders/gcloud'
 #   entrypoint: 'bash'
 #   args:
