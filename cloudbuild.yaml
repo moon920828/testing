@@ -183,7 +183,6 @@ steps:
   args:
   - '-c'
   - |
-
     SECRET_VALUE=$(gcloud secrets versions access latest --secret="testing1")
 
     # Deploy the Cloud Function
