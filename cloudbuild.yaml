@@ -193,6 +193,8 @@ steps:
 
     SLACK_WEBHOOK_URL=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
 
+    echo $SLACK_WEBHOOK_URL
+
     # Deploy the Cloud Function
     gcloud functions deploy helloWorld123 \
       --runtime nodejs20 \
@@ -203,7 +205,7 @@ steps:
       --gen2 \
       --entry-point=hey \
       - --set-env-vars
-      - SLACK_WEBHOOK_URL="${SLACK_WEBHOOK_URL}"
+      - SLACK_WEBHOOK_URL="testing"
       --service-account=application-integration-test@my-project-1553458465069.iam.gserviceaccount.com
 
 options:
