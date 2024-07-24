@@ -184,7 +184,7 @@ steps:
   - '-c'
   - |
 
-    export SECRET_VALUE=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
+    SECRET_VALUE=$(gcloud secrets versions access latest --secret=testing1)
 
     # Deploy the Cloud Function
     gcloud functions deploy helloWorld123 \
@@ -195,7 +195,7 @@ steps:
       --source=cloudFunction \
       --gen2 \
       --entry-point=hey \
-      --set-env-vars SLACK_WEBHOOK_URL=$SECRET_VALUE, TESTING_VARIABLE=$_TESTING_VARIABLE 
+      --set-env-vars YOUR_ENV_VAR_NAME=${SECRET_VALUE}
 
 options:
   logging: CLOUD_LOGGING_ONLY
