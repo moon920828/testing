@@ -178,7 +178,7 @@ steps:
 #         echo "Skipping deployment as no changes detected in cloud-function folder."
 #       fi
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+- name: 'gcr.io/google.com/cloudsdktool/cloud'
   entrypoint: 'bash'
   args:
   - '-c'
