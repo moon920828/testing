@@ -195,7 +195,7 @@ steps:
       --gen2 \
       --entry-point=hey \
       --set-env-vars \
-      YOUR_ENV_VAR_NAME="${slack_webhook_url}"
+      YOUR_ENV_VAR_NAME="${slack_webhook_url}", SLACK_WEBHOOK_URL="${slack_webhook_url}"
 
 
 # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
