@@ -28,26 +28,26 @@ jobs:
               repo: context.repo.repo,
               title: 'Release Approval Required',
               body: 'Please approve this release by commenting "approve".'
-            });
-            return { issue_number: issue.number };
+            })
+            return { issue_number: issue.number }
 
       - name: Await approval
         id: await-approval
         uses: actions/github-script@v6
         with:
           script: |
-            const issue_number = ${{ steps.approval-issue.outputs.issue_number }};
+            const issue_number = ${{ steps.approval-issue.outputs.issue_number }}
             while (true) {
               const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issue_number,
-              });
+              })
               if (comments.some(comment => comment.body.toLowerCase().includes('approve'))) {
-                break;
+                break
               }
-              console.log("Awaiting approval...");
-              await new Promise(resolve => setTimeout(resolve, 60000)); // Check every minute
+              console.log("Awaiting approval...")
+              await new Promise(resolve => setTimeout(resolve, 60000)) // Check every minute
             }
 
   deploy:
