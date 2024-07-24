@@ -62,9 +62,9 @@ steps:
     - --service-account=$_TESTING_VARIABLE
     - --entry-point=hey
     - --set-env-vars
-    - SLACK_WEBHOOK_URL=$WEBHOOK_URL, TESTING_VARIABLE=$_TESTING_VARIABLE
+    - SLACK_WEBHOOK_URL=$$WEBHOOK_URL, TESTING_VARIABLE=$_TESTING_VARIABLE
     - --gen2
-  # secretEnv: ['WEBHOOK_URL']
+  secretEnv: ['WEBHOOK_URL']
     
 
 # - name: 'gcr.io/cloud-builders/gcloud'
