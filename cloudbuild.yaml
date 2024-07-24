@@ -204,15 +204,15 @@ steps:
 
 
 #     # Deploy the Cloud Function
-    gcloud functions deploy testing123 \
-      --runtime nodejs20 \
-      --trigger-http \
-      --allow-unauthenticated \
-      --region=us-central1 \
-      --source=cloudFunction \
-      --gen2 \
-      --entry-point=hey \
-      --set-env-vars YOUR_ENV_VAR_NAME=${SALESFORCE_SECRET_VALUE}
+    # gcloud functions deploy testing123 \
+    #   --runtime nodejs20 \
+    #   --trigger-http \
+    #   --allow-unauthenticated \
+    #   --region=us-central1 \
+    #   --source=cloudFunction \
+    #   --gen2 \
+    #   --entry-point=hey \
+    #   --set-env-vars YOUR_ENV_VAR_NAME=${SALESFORCE_SECRET_VALUE}
 
 options:
   logging: CLOUD_LOGGING_ONLY
