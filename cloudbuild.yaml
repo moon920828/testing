@@ -178,12 +178,20 @@ steps:
 #         echo "Skipping deployment as no changes detected in cloud-function folder."
 #       fi
 
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      # get the necessary secrets from the Secret Manager
+      export SALESFORCE_SECRET_VALUE=$(gcloud secrets versions access latest --secret="testing1")
+
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
   args:
   - '-c'
   - |
-    SECRET_VALUE="$(gcloud secrets versions access latest --secret="testing1")"
+
 
     # Deploy the Cloud Function
     gcloud functions deploy testing123 \
@@ -194,7 +202,7 @@ steps:
       --source=cloudFunction \
       --gen2 \
       --entry-point=hey \
-      --set-env-vars YOUR_ENV_VAR_NAME=${SECRET_VALUE}
+      --set-env-vars YOUR_ENV_VAR_NAME=${SALESFORCE_SECRET_VALUE}
 
 options:
   logging: CLOUD_LOGGING_ONLY
