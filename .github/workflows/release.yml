@@ -8,45 +8,51 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Build
-      run: echo "Building the project..."
+      - name: Build
+        run: echo "Building the project..."
 
   approval:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Await approval
-      id: approval
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const issue_number = 1; // Replace with your issue number
-          const result = await github.rest.issues.createComment({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: issue_number,
-            body: 'Please approve this release by commenting "approve".'
-          });
-          
-          // Wait for the approval
-          while (true) {
-            const { data: comments } = await github.rest.issues.listComments({
+      - name: Create approval issue
+        id: approval-issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: issue } = await github.rest.issues.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: issue_number,
+              title: 'Release Approval Required',
+              body: 'Please approve this release by commenting "approve".'
             });
-            if (comments.some(comment => comment.body.toLowerCase().includes('approve'))) {
-              break;
+            return { issue_number: issue.number };
+
+      - name: Await approval
+        id: await-approval
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issue_number = ${{ steps.approval-issue.outputs.issue_number }};
+            while (true) {
+              const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue_number,
+              });
+              if (comments.some(comment => comment.body.toLowerCase().includes('approve'))) {
+                break;
+              }
+              console.log("Awaiting approval...");
+              await new Promise(resolve => setTimeout(resolve, 60000)); // Check every minute
             }
-            await new Promise(resolve => setTimeout(resolve, 60000)); // Check every minute
-          }
 
   deploy:
     needs: approval
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy
-      run: echo "Deploying the release..."
+      - name: Deploy
+        run: echo "Deploying the release..."
