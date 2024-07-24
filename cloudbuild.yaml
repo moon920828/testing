@@ -184,7 +184,7 @@ steps:
     - '-c'
     - |
       # get the necessary secrets from the Secret Manager
-      export SALESFORCE_SECRET_VALUE=$(gcloud secrets versions access latest --secret="testing1")
+      export SALESFORCE_SECRET_VALUE="helloworld"
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
