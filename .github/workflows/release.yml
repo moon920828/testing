@@ -14,30 +14,39 @@ jobs:
     - name: Build
       run: echo "Building the project..."
 
-    - name: Request Approval
-      uses: hmarr/approve-pull-request-action@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PULL_REQUEST_URL: ${{ github.event.pull_request.html_url }}
-      with:
-        message: 'Please approve the release.'
-
   approval:
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
     steps:
     - name: Await approval
-      uses: reviewdog/action-approval@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      id: approval
+      uses: actions/github-script@v6
       with:
-        approvers: 'octocat, hubot'
-        comment: 'Please approve this release.'
-        reaction: 'eyes'
+        script: |
+          const issue_number = 1; // Replace with your issue number
+          const result = await github.rest.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issue_number,
+            body: 'Please approve this release by commenting "approve".'
+          });
+          
+          // Wait for the approval
+          while (true) {
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+            });
+            if (comments.some(comment => comment.body.toLowerCase().includes('approve'))) {
+              break;
+            }
+            await new Promise(resolve => setTimeout(resolve, 60000)); // Check every minute
+          }
 
   deploy:
-    runs-on: ubuntu-latest
     needs: approval
+    runs-on: ubuntu-latest
     steps:
     - name: Deploy
       run: echo "Deploying the release..."
