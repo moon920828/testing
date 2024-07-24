@@ -188,6 +188,16 @@ steps:
 
       echo "hello_world=${hello_world}" >> /workspace/env_vars.txt
 
+      gcloud functions deploy testing123 \
+      --runtime nodejs20 \
+      --trigger-http \
+      --allow-unauthenticated \
+      --region=us-central1 \
+      --source=cloudFunction \
+      --gen2 \
+      --entry-point=hey \
+      --set-env-vars YOUR_ENV_VAR_NAME="${hello_world}"
+
 
 # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #   entrypoint: 'bash'
