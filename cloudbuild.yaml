@@ -184,9 +184,10 @@ steps:
     - '-c'
     - |
       # get the necessary secrets from the Secret Manager
-      SALESFORCE_SECRET_VALUE="helloworld"
+      hello_world="helloworld"
 
-      echo $SALESFORCE_SECRET_VALUE
+      echo "hello_world=${hello_world}" >> /workspace/env_vars.txt
+
 
 # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #   entrypoint: 'bash'
