@@ -184,7 +184,7 @@ steps:
     - '-c'
     - |
       # get the necessary secrets from the Secret Manager
-      hello_world=$(gcloud secrets versions access latest --secret="testing1")
+      hello_world=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
 
       gcloud functions deploy testing123 \
       --runtime nodejs20 \
