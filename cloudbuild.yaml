@@ -209,9 +209,9 @@ steps:
 options:
   logging: CLOUD_LOGGING_ONLY
   # defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
-availableSecrets:
-  secretManager:
-  - versionName: projects/$PROJECT_ID/secrets/$_PASSWORD_SECRET_NAME/versions/latest
-    env: 'WEBHOOK_URL'
+# availableSecrets:
+#   secretManager:
+#   - versionName: projects/$PROJECT_ID/secrets/$_PASSWORD_SECRET_NAME/versions/latest
+#     env: 'WEBHOOK_URL'
 #   - versionName: projects/$PROJECT_ID/secrets/$_USERNAME_SECRET_NAME/versions/latest
 #     env: 'USERNAME'
