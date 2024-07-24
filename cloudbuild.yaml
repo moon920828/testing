@@ -62,7 +62,7 @@ steps:
     - --service-account=$_TESTING_VARIABLE
     - --entry-point=hey
     - --set-env-vars
-    - API_BASE_URL=SLACK_WEBHOOK_URL=$$SLACK_WEBHOOK_URL
+    - SLACK_WEBHOOK_URL=$$SLACK_WEBHOOK_URL
     - --gen2
   secretEnv: ['SLACK_WEBHOOK_URL']
     
