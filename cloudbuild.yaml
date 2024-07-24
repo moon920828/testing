@@ -49,22 +49,22 @@ steps:
 #   - 'PROJECT_ID=$PROJECT_ID'
 #   secretEnv: ['USERNAME', 'PASSWORD']
 
-# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-#   args:
-#     - gcloud
-#     - functions
-#     - deploy
-#     - helloWorld123
-#     - --region=us-central1
-#     - --source=cloudFunction
-#     - --trigger-http
-#     - --runtime=nodejs20
-#     - --service-account=$_TESTING_VARIABLE
-#     - --entry-point=hey
-#     - --set-env-vars
-#     - SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL
-#     - --gen2
-#   secretEnv: ['SLACK_WEBHOOK_URL']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  args:
+    - gcloud
+    - functions
+    - deploy
+    - helloWorld123
+    - --region=us-central1
+    - --source=cloudFunction
+    - --trigger-http
+    - --runtime=nodejs20
+    - --service-account=$_TESTING_VARIABLE
+    - --entry-point=hey
+    - --set-env-vars
+    - SLACK_WEBHOOK_URL=$_PASSWORD_SECRET_NAME, TESTING_VARIABLE=$_TESTING_VARIABLE
+    - --gen2
+  # secretEnv: ['SLACK_WEBHOOK_URL']
     
 
 # - name: 'gcr.io/cloud-builders/gcloud'
@@ -178,33 +178,33 @@ steps:
 #         echo "Skipping deployment as no changes detected in cloud-function folder."
 #       fi
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    # Fetch the service account key from Secret Manager
-    # gcloud secrets versions access latest --secret=cloud-build-sa-key > /tmp/key.json
+# - name: 'gcr.io/google.com/cloudsdktool/cloud'
+#   entrypoint: 'bash'
+#   args:
+#   - '-c'
+#   - |
+#     # Fetch the service account key from Secret Manager
+#     # gcloud secrets versions access latest --secret=cloud-build-sa-key > /tmp/key.json
 
-    # Authenticate using the service account key
-    # gcloud auth activate-service-account --key-file=/tmp/key.json
+#     # Authenticate using the service account key
+#     # gcloud auth activate-service-account --key-file=/tmp/key.json
 
-    # gcloud auth login
+#     # gcloud auth login
 
-    SLACK_WEBHOOK_URL=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
+#     SLACK_WEBHOOK_URL=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
 
-    echo $SLACK_WEBHOOK_URL
+#     echo $SLACK_WEBHOOK_URL
 
-    # Deploy the Cloud Function
-    gcloud functions deploy helloWorld123 \
-      --runtime nodejs20 \
-      --trigger-http \
-      --allow-unauthenticated \
-      --region=us-central1 \
-      --source=cloudFunction \
-      --gen2 \
-      --entry-point=hey \
-      --set-env-vars SLACK_WEBHOOK_URL=$_PASSWORD_SECRET_NAME, TESTING_VARIABLE=$_TESTING_VARIABLE 
+#     # Deploy the Cloud Function
+#     gcloud functions deploy helloWorld123 \
+#       --runtime nodejs20 \
+#       --trigger-http \
+#       --allow-unauthenticated \
+#       --region=us-central1 \
+#       --source=cloudFunction \
+#       --gen2 \
+#       --entry-point=hey \
+#       --set-env-vars SLACK_WEBHOOK_URL=$_PASSWORD_SECRET_NAME, TESTING_VARIABLE=$_TESTING_VARIABLE 
 
 options:
   logging: CLOUD_LOGGING_ONLY
