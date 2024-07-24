@@ -191,9 +191,9 @@ steps:
 
     # gcloud auth login
 
-    SLACK_WEBHOOK_URL=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
+    # SLACK_WEBHOOK_URL=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
 
-    echo $SLACK_WEBHOOK_URL
+    # echo $SLACK_WEBHOOK_URL
 
     # Deploy the Cloud Function
     gcloud functions deploy helloWorld123 \
@@ -204,8 +204,7 @@ steps:
       --source=cloudFunction \
       --gen2 \
       --entry-point=hey \
-      --set-env-vars \
-      SLACK_WEBHOOK_URL="testing" \
+      --set-env-vars SLACK_WEBHOOK_URL="testing" \
       --service-account=application-integration-test@my-project-1553458465069.iam.gserviceaccount.com
 
 options:
