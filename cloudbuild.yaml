@@ -194,7 +194,7 @@ steps:
       --source=cloudFunction \
       --gen2 \
       --entry-point=hey \
-      --set-env-vars YOUR_ENV_VAR_NAME=$SALESFORCE_SECRET_VALUE
+      --set-env-vars YOUR_ENV_VAR_NAME="$SALESFORCE_SECRET_VALUE"
 
 # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #   entrypoint: 'bash'
