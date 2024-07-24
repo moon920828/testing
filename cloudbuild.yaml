@@ -191,9 +191,9 @@ steps:
 
     # gcloud auth login
 
-    # SLACK_WEBHOOK_URL=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
+    SLACK_WEBHOOK_URL=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
 
-    # echo $SLACK_WEBHOOK_URL
+    echo $SLACK_WEBHOOK_URL
 
     # Deploy the Cloud Function
     gcloud functions deploy helloWorld123 \
