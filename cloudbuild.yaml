@@ -178,18 +178,11 @@ steps:
 #         echo "Skipping deployment as no changes detected in cloud-function folder."
 #       fi
 
-- name: 'gcr.io/cloud-builders/gcloud'
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
   args:
   - '-c'
   - |
-    # Fetch the service account key from Secret Manager
-    # gcloud secrets versions access latest --secret=cloud-build-sa-key > /tmp/key.json
-
-    # Authenticate using the service account key
-    # gcloud auth activate-service-account --key-file=/tmp/key.json
-
-    # gcloud auth login
 
     URL=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
 
