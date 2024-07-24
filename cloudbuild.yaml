@@ -184,7 +184,7 @@ steps:
   - '-c'
   - |
 
-    SECRET_VALUE=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
+    SECRET_VALUE=$(gcloud secrets versions access latest --secret=$SECRET_NAME --format='get(payload.data)' | tr '_-' '/+' | base64 -d)
 
     # Deploy the Cloud Function
     gcloud functions deploy helloWorld123 \
