@@ -184,7 +184,7 @@ steps:
     - '-c'
     - |
       # get the necessary secrets from the Secret Manager
-      hello_world=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
+      slack_webhook_url=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
 
       gcloud functions deploy testing123 \
       --runtime nodejs20 \
@@ -194,7 +194,7 @@ steps:
       --source=cloudFunction \
       --gen2 \
       --entry-point=hey \
-      --set-env-vars YOUR_ENV_VAR_NAME="${hello_world}"
+      --set-env-vars YOUR_ENV_VAR_NAME="${slack_webhook_url}"
 
 
 # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
