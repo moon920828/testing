@@ -186,18 +186,16 @@ steps:
 
     SECRET_VALUE=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
 
-    echo $SECRET_VALUE
-
     # Deploy the Cloud Function
-    # gcloud functions deploy helloWorld123 \
-    #   --runtime nodejs20 \
-    #   --trigger-http \
-    #   --allow-unauthenticated \
-    #   --region=us-central1 \
-    #   --source=cloudFunction \
-    #   --gen2 \
-    #   --entry-point=hey \
-    #   --set-env-vars SLACK_WEBHOOK_URL=$_PASSWORD_SECRET_NAME, TESTING_VARIABLE=$_TESTING_VARIABLE 
+    gcloud functions deploy helloWorld123 \
+      --runtime nodejs20 \
+      --trigger-http \
+      --allow-unauthenticated \
+      --region=us-central1 \
+      --source=cloudFunction \
+      --gen2 \
+      --entry-point=hey \
+      --set-env-vars SLACK_WEBHOOK_URL=$SECRET_VALUE, TESTING_VARIABLE=$_TESTING_VARIABLE 
 
 options:
   logging: CLOUD_LOGGING_ONLY
