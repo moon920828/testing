@@ -186,8 +186,6 @@ steps:
       # get the necessary secrets from the Secret Manager
       hello_world="helloworld"
 
-      echo "hello_world=${hello_world}" >> /workspace/env_vars.txt
-
       gcloud functions deploy testing123 \
       --runtime nodejs20 \
       --trigger-http \
