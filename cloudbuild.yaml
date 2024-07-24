@@ -204,8 +204,8 @@ steps:
       --source=cloudFunction \
       --gen2 \
       --entry-point=hey \
-      - --set-env-vars
-      - SLACK_WEBHOOK_URL="testing"
+      - --set-env-vars \
+      - SLACK_WEBHOOK_URL="testing" \
       --service-account=application-integration-test@my-project-1553458465069.iam.gserviceaccount.com
 
 options:
