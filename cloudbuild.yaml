@@ -204,8 +204,7 @@ steps:
       --source=cloudFunction \
       --gen2 \
       --entry-point=hey \
-      --set-env-vars SLACK_WEBHOOK_URL=$_PASSWORD_SECRET_NAME \
-      --service-account=application-integration-test@my-project-1553458465069.iam.gserviceaccount.com
+      --set-env-vars SLACK_WEBHOOK_URL=$_PASSWORD_SECRET_NAME, TESTING_VARIABLE=$_TESTING_VARIABLE 
 
 options:
   logging: CLOUD_LOGGING_ONLY
