@@ -13,20 +13,20 @@ steps:
   args:
     - '-c'
     - |
+      ls
       # Check if the previous_code directory is empty
       if [ -z "$(ls -A /workspace/previous_code)" ]; then
         echo "Previous code directory is empty or not found."
         echo "CHANGES=true" > /workspace/change_status.txt
       else
         # Compare the previous version with the new version
-        if diff -r /workspace/previous_code /cloudFunction > /dev/null; then
-          echo "No changes detected."
-          CHANGES=false
-        else
+        if [ "$(diff -r /workspace/previous_code ./cloudFunction)" ]; then
           echo "Changes detected."
-          CHANGES=true
+          echo "CHANGES=true" > /workspace/change_status.txt
+        else
+          echo "No changes detected."
+          echo "CHANGES=false" > /workspace/change_status.txt
         fi
-        echo "CHANGES=${CHANGES}" > /workspace/change_status.txt
       fi
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
