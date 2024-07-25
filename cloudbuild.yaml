@@ -43,7 +43,7 @@ steps:
       if grep -q 'CHANGES=true' /workspace/change_status.txt; then
         gcloud functions deploy testinghererererere \
         --region=us-central1 \
-        --source=cloud-function \
+        --source=cloudFunction \
         --trigger-http \
         --runtime=nodejs20 \
         --entry-point=hey
