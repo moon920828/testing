@@ -27,10 +27,10 @@ steps:
         # Compare the previous version with the new version
         if [ "$(diff -r workspace/previous_code cloudFunction)" ]; then
           echo "Changes detected."
-          echo "CHANGES=true" > workspace/change_status.txt
+          echo "CHANGES=true" > /workspace/change_status.txt
         else
           echo "No changes detected."
-          echo "CHANGES=false" > workspace/change_status.txt
+          echo "CHANGES=false" > /workspace/change_status.txt
         fi
       fi
 
