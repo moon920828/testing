@@ -1,0 +1,18 @@
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      # get the necessary secrets from the Secret Manager
+      slack_webhook_url=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
+
+      gcloud functions deploy testing123 \
+      --runtime nodejs20 \
+      --trigger-http \
+      --allow-unauthenticated \
+      --region=us-central1 \
+      --source=cloudFunction \
+      --gen2 \
+      --entry-point=hey \
+      --set-env-vars \
+      YOUR_ENV_VAR_NAME="${slack_webhook_url}",SLACK_WEBHOOK_URL="${slack_webhook_url}"
