@@ -1,4 +1,16 @@
 steps:
+- name: 'alpine'
+  entrypoint: 'sh'
+  args:
+    - '-c'
+    - |
+      # Check for changes in the specified folder
+      if git diff --quiet HEAD~1 HEAD ./cloudFunction; then
+        echo "No changes in the folder. Skipping build step."
+        exit 0
+      else
+        echo "Changes detected in the folder. Proceeding with build step."
+      fi
 # - name: 'ubuntu:latest'
 #   entrypoint: 'bash'
 #   args:
@@ -178,24 +190,24 @@ steps:
 #         echo "Skipping deployment as no changes detected in cloud-function folder."
 #       fi
 
-- name: 'gcr.io/cloud-builders/gcloud'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
-      # get the necessary secrets from the Secret Manager
-      slack_webhook_url=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   entrypoint: 'bash'
+#   args:
+#     - '-c'
+#     - |
+#       # get the necessary secrets from the Secret Manager
+#       slack_webhook_url=$(gcloud secrets versions access latest --secret=$_PASSWORD_SECRET_NAME)
 
-      gcloud functions deploy testing123 \
-      --runtime nodejs20 \
-      --trigger-http \
-      --allow-unauthenticated \
-      --region=us-central1 \
-      --source=cloudFunction \
-      --gen2 \
-      --entry-point=hey \
-      --set-env-vars \
-      YOUR_ENV_VAR_NAME="${slack_webhook_url}",SLACK_WEBHOOK_URL="${slack_webhook_url}"
+#       gcloud functions deploy testing123 \
+#       --runtime nodejs20 \
+#       --trigger-http \
+#       --allow-unauthenticated \
+#       --region=us-central1 \
+#       --source=cloudFunction \
+#       --gen2 \
+#       --entry-point=hey \
+#       --set-env-vars \
+#       YOUR_ENV_VAR_NAME="${slack_webhook_url}",SLACK_WEBHOOK_URL="${slack_webhook_url}"
 
 
 # - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
