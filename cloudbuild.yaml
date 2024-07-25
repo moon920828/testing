@@ -1,6 +1,5 @@
 steps:
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  id: 'Download current code'
   entrypoint: 'bash'
   args:
     - '-c'
@@ -11,7 +10,6 @@ steps:
       gsutil cp gs://test_bucket/function.zip /workspace/new_function.zip
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  id: 'Compare code'
   entrypoint: 'bash'
   args:
     - '-c'
@@ -29,7 +27,6 @@ steps:
       fi
 
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  id: 'Deploy Cloud Function'
   entrypoint: 'bash'
   if: |
     [ "$(grep -q 'Changes detected' /workspace/change_status.txt)" ]
