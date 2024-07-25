@@ -5,39 +5,42 @@ steps:
     - '-c'
     - |
       # Download the previous version of the code
-      gsutil cp gs://test_bucket/function.zip /workspace/previous_function.zip
-      # Download the new version of the code
-      gsutil cp gs://test_bucket/function.zip /workspace/new_function.zip
+      gsutil rsync -r gs://YOUR_BUCKET_NAME/path/to/previous/ /workspace/previous_code || true
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
-      # Unzip the downloaded archives
-      unzip /workspace/previous_function.zip -d /workspace/previous
-      unzip /workspace/new_function.zip -d /workspace/new
-      
-      # Compare the contents
-      if diff -r /workspace/previous /workspace/new; then
-        echo "No changes detected."
-        exit 0
-      else
-        echo "Changes detected."
-      fi
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Compare code'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        # Compare the previous version with the new version
+        if [ "$(diff -r /workspace/previous_code ./cloudFunction)" ]; then
+          echo "Changes detected."
+          echo "CHANGES=true" > /workspace/change_status.txt
+        else
+          echo "No changes detected."
+          echo "CHANGES=false" > /workspace/change_status.txt
+        fi
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'bash'
-  if: |
-    [ "$(grep -q 'Changes detected' /workspace/change_status.txt)" ]
-  args:
-    - '-c'
-    - |
-      gcloud functions deploy YOUR_FUNCTION_NAME \
-        --runtime RUNTIME \
-        --trigger-http \
-        --source gs://test_bucket/function.zip \
-        --allow-unauthenticated
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy Cloud Function'
+    entrypoint: 'bash'
+    waitFor: ['Compare code']
+    args:
+      - '-c'
+      - |
+        if grep -q 'CHANGES=true' /workspace/change_status.txt; then
+          gcloud functions deploy YOUR_FUNCTION_NAME \
+            --runtime RUNTIME \
+            --trigger-http \
+            --source ./cloudFunction \
+            --allow-unauthenticated
+
+          # Upload the new code as the previous version for future builds
+          gsutil rsync -r ./cloudFunction gs://YOUR_BUCKET_NAME/path/to/previous/
+        else
+          echo "Skipping deployment, no changes detected."
+        fi
 
 # - name: 'ubuntu:latest'
 #   entrypoint: 'bash'
