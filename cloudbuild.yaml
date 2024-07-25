@@ -42,7 +42,7 @@ steps:
     - |
       if grep -q 'CHANGES=true' /workspace/change_status.txt; then
         gcloud functions deploy testinghererererere \
-          --runtime RUNTIME \
+          --runtime=nodejs20 \
           --trigger-http \
           --source=cloudFunction \
           --allow-unauthenticated
