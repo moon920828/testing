@@ -5,6 +5,8 @@ steps:
     - '-c'
     - |
       echo "running"
+
+      mkdir -p /workspace/previous_code
       # Download the previous version of the code
       gsutil rsync -r gs://testing_bucket_what_the/path/to/previous/ /workspace/previous_code || true
 
