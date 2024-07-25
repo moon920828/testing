@@ -8,7 +8,7 @@ steps:
 
       mkdir -p /workspace/previous_code
       # Download the previous version of the code
-      gsutil rsync -r gs://testing_bucket_what_the/path/to/previous/ /workspace/previous_code || true
+      gcloud storage cp --recursive gs://testing_bucket_what_the/path/to/previous/ /workspace/previous_code || true
 
       ls /workspace/previous_code
 
@@ -50,7 +50,7 @@ steps:
 
 
         # Upload the new code as the previous version for future builds
-        gsutil rsync -r ./cloudFunction gs://testing_bucket_what_the/path/to/previous/
+        gcloud storage cp ./cloudFunction gs://testing_bucket_what_the/path/to/previous/
       else
         echo "Skipping deployment, no changes detected."
       fi
