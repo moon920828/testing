@@ -17,3 +17,6 @@ steps:
       --entry-point=hey \
       --set-env-vars \
       YOUR_ENV_VAR_NAME="${slack_webhook_url}",SLACK_WEBHOOK_URL="${slack_webhook_url}"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
