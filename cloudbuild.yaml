@@ -7,7 +7,8 @@ steps:
       # Download the previous version of the code
       gsutil rsync -r gs://YOUR_BUCKET_NAME/path/to/previous/ /workspace/previous_code || true
 
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+- id: 'Compare code'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: 'bash'
   args:
     - '-c'
