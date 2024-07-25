@@ -41,7 +41,7 @@ steps:
     - '-c'
     - |
       if grep -q 'CHANGES=true' /workspace/change_status.txt; then
-        gcloud functions deploy YOUR_FUNCTION_NAME \
+        gcloud functions deploy testinghererererere \
           --runtime RUNTIME \
           --trigger-http \
           --source=cloudFunction \
