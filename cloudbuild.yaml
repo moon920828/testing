@@ -25,7 +25,7 @@ steps:
         echo "CHANGES=true" > /workspace/change_status.txt
       else
         # Compare the previous version with the new version
-        if [ "$(diff -r workspace/previous_code cloudFunction)" ]; then
+        if [ "$(diff -r /workspace/previous_code cloudFunction)" ]; then
           echo "Changes detected."
           echo "CHANGES=true" > /workspace/change_status.txt
         else
