@@ -42,10 +42,12 @@ steps:
     - |
       if grep -q 'CHANGES=true' /workspace/change_status.txt; then
         gcloud functions deploy testinghererererere \
-          --runtime=nodejs20 \
-          --trigger-http \
-          --source=cloudFunction \
-          --allow-unauthenticated
+        --region=us-central1 \
+        --source=cloud-function \
+        --trigger-http \
+        --runtime=nodejs20 \
+        --entry-point=hey
+
 
         # Upload the new code as the previous version for future builds
         gsutil rsync -r ./cloudFunction gs://testing_bucket_what_the/path/to/previous/
