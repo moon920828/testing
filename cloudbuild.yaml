@@ -20,7 +20,7 @@ steps:
     - |
       ls
       # Check if the previous_code directory is empty
-      if [ -z "$(ls -A workspace/previous_code)" ]; then
+      if [ -z "$(ls -A /workspace/previous_code)" ]; then
         echo "Previous code directory is empty or not found."
         echo "CHANGES=true" > /workspace/change_status.txt
       else
