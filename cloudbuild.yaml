@@ -5,7 +5,7 @@ steps:
     - '-c'
     - |
       # Download the previous version of the code
-      gsutil rsync -r gs://YOUR_BUCKET_NAME/path/to/previous/ /workspace/previous_code || true
+      gsutil rsync -r gs://testing_bucket_what_the/path/to/previous/ /workspace/previous_code || true
 
 - id: 'Compare code'
   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -43,7 +43,7 @@ steps:
           --allow-unauthenticated
 
         # Upload the new code as the previous version for future builds
-        gsutil rsync -r ./cloudFunction gs://YOUR_BUCKET_NAME/path/to/previous/
+        gsutil rsync -r ./cloudFunction gs://testing_bucket_what_the/path/to/previous/
       else
         echo "Skipping deployment, no changes detected."
       fi
