@@ -2,6 +2,6 @@
     "hello": "${VAR1}",
     "world": "${VAR2}",
     "test1": "$VAR1",
-    "test2": "$VAR2"
+    "test2123123123123": "$VAR2"
 }
 
