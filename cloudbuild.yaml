@@ -10,48 +10,48 @@ steps:
       # Download the previous version of the code
       gsutil rsync -r gs://testing_bucket_what_the/path/to/previous/ /workspace/previous_code || true
 
-      cat /workspace/previous_code
+      ls /workspace/previous_code
 
-# - id: 'Compare code'
-#   name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-#   entrypoint: 'bash'
-#   args:
-#     - '-c'
-#     - |
-#       ls
-#       # Check if the previous_code directory is empty
-#       if [ -z "$(ls -A workspace/previous_code)" ]; then
-#         echo "Previous code directory is empty or not found."
-#         echo "CHANGES=true" > /workspace/change_status.txt
-#       else
-#         # Compare the previous version with the new version
-#         if [ "$(diff -r workspace/previous_code cloudFunction)" ]; then
-#           echo "Changes detected."
-#           echo "CHANGES=true" > workspace/change_status.txt
-#         else
-#           echo "No changes detected."
-#           echo "CHANGES=false" > workspace/change_status.txt
-#         fi
-#       fi
+- id: 'Compare code'
+  name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      ls
+      # Check if the previous_code directory is empty
+      if [ -z "$(ls -A workspace/previous_code)" ]; then
+        echo "Previous code directory is empty or not found."
+        echo "CHANGES=true" > /workspace/change_status.txt
+      else
+        # Compare the previous version with the new version
+        if [ "$(diff -r workspace/previous_code cloudFunction)" ]; then
+          echo "Changes detected."
+          echo "CHANGES=true" > workspace/change_status.txt
+        else
+          echo "No changes detected."
+          echo "CHANGES=false" > workspace/change_status.txt
+        fi
+      fi
 
-# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-#   entrypoint: 'bash'
-#   waitFor: ['Compare code']
-#   args:
-#     - '-c'
-#     - |
-#       if grep -q 'CHANGES=true' /workspace/change_status.txt; then
-#         gcloud functions deploy YOUR_FUNCTION_NAME \
-#           --runtime RUNTIME \
-#           --trigger-http \
-#           --source=cloudFunction \
-#           --allow-unauthenticated
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'bash'
+  waitFor: ['Compare code']
+  args:
+    - '-c'
+    - |
+      if grep -q 'CHANGES=true' /workspace/change_status.txt; then
+        gcloud functions deploy YOUR_FUNCTION_NAME \
+          --runtime RUNTIME \
+          --trigger-http \
+          --source=cloudFunction \
+          --allow-unauthenticated
 
-#         # Upload the new code as the previous version for future builds
-#         gsutil rsync -r ./cloudFunction gs://testing_bucket_what_the/path/to/previous/
-#       else
-#         echo "Skipping deployment, no changes detected."
-#       fi
+        # Upload the new code as the previous version for future builds
+        gsutil rsync -r ./cloudFunction gs://testing_bucket_what_the/path/to/previous/
+      else
+        echo "Skipping deployment, no changes detected."
+      fi
 
 # - name: 'ubuntu:latest'
 #   entrypoint: 'bash'
