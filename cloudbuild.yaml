@@ -50,7 +50,7 @@ steps:
 
 
         # Upload the new code as the previous version for future builds
-        gcloud storage cp ./cloudFunction gs://testing_bucket_what_the/path/to/previous/
+        gcloud storage cp /cloudFunction gs://testing_bucket_what_the/path/to/previous/
       else
         echo "Skipping deployment, no changes detected."
       fi
