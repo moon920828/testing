@@ -36,14 +36,15 @@ jobs:
       run: |
         ISSUE_BODY="Please comment 'approve' to approve this release."
         ISSUE_TITLE="Release Approval Needed"
-        curl -X POST \
+        RESPONSE=$(curl -s \
+          -X POST \
           -H "Authorization: token $GITHUB_TOKEN" \
           -H "Accept: application/vnd.github.v3+json" \
           -d "{\"title\": \"$ISSUE_TITLE\", \"body\": \"$ISSUE_BODY\"}" \
-          https://api.github.com/repos/${{ github.repository }}/issues \
-          > issue.json
+          https://api.github.com/repos/${{ github.repository }}/issues)
+        echo "$RESPONSE" > issue.json
         echo "Created issue for approval. Issue details: $(cat issue.json)"
-        ISSUE_NUMBER=$(jq '.number' issue.json)
+        ISSUE_NUMBER=$(echo "$RESPONSE" | jq '.number')
         echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
 
   check-approval:
@@ -57,12 +58,12 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         ISSUE_NUMBER=${{ env.ISSUE_NUMBER }}
-        COMMENTS=$(curl -s \
+        COMMENTS_RESPONSE=$(curl -s \
           -H "Authorization: token $GITHUB_TOKEN" \
           -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER/comments \
-          | jq -r '.[].body')
-        if echo "$COMMENTS" | grep -qi 'approve'; then
+          https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER/comments)
+        echo "$COMMENTS_RESPONSE" > comments.json
+        if echo "$COMMENTS_RESPONSE" | jq -e '.[] | select(.body | test("approve"; "i"))' > /dev/null; then
           echo "Release approved."
         else
           echo "Release not approved."
