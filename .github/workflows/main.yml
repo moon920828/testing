@@ -14,9 +14,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up GitHub CLI
-      run: sudo apt-get install gh -y
-
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -32,39 +29,44 @@ jobs:
     needs: create-release
 
     steps:
-    - name: Set up GitHub CLI
-      run: sudo apt-get install gh -y
-
-    - name: Await approval
-      id: await_approval
+    - name: Create Approval Issue
+      id: create_issue
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo "Awaiting manual approval..."
-        echo "To approve this release, comment 'approve' on the issue created by this workflow."
-        gh issue create --title "Release Approval Needed" --body "Please comment 'approve' to approve this release."
+        ISSUE_BODY="Please comment 'approve' to approve this release."
+        ISSUE_TITLE="Release Approval Needed"
+        curl -X POST \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          -d "{\"title\": \"$ISSUE_TITLE\", \"body\": \"$ISSUE_BODY\"}" \
+          https://api.github.com/repos/${{ github.repository }}/issues \
+          > issue.json
+        echo "Created issue for approval. Issue details: $(cat issue.json)"
+        ISSUE_NUMBER=$(jq '.number' issue.json)
+        echo "ISSUE_NUMBER=$ISSUE_NUMBER" >> $GITHUB_ENV
 
   check-approval:
     runs-on: ubuntu-latest
     needs: wait-for-approval
 
     steps:
-    - name: Set up GitHub CLI
-      run: sudo apt-get install gh -y
-
-    - name: Check for approval
+    - name: Check Approval
       id: check_approval
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo "Checking for approval..."
-        ISSUE_NUMBER=$(gh issue list --search 'Release Approval Needed' --json number --jq '.[0].number')
-        APPROVED=$(gh issue view $ISSUE_NUMBER --json comments --jq '.comments[].body' | grep -i 'approve' || true)
-        if [ -z "$APPROVED" ]; then
+        ISSUE_NUMBER=${{ env.ISSUE_NUMBER }}
+        COMMENTS=$(curl -s \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/issues/$ISSUE_NUMBER/comments \
+          | jq -r '.[].body')
+        if echo "$COMMENTS" | grep -qi 'approve'; then
+          echo "Release approved."
+        else
           echo "Release not approved."
           exit 1
-        else
-          echo "Release approved."
         fi
 
   deploy:
