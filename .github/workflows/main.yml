@@ -1,0 +1,66 @@
+name: Gated Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v1.0.0
+        release_name: Release v1.0.0
+        draft: true  # Create as draft for manual review
+
+  wait-for-approval:
+    runs-on: ubuntu-latest
+    needs: create-release
+
+    steps:
+    - name: Await approval
+      id: await_approval
+      run: |
+        echo "Awaiting manual approval..."
+        echo "To approve this release, comment 'approve' on the issue created by this workflow."
+        gh issue create --title "Release Approval Needed" --body "Please comment 'approve' to approve this release."
+
+  check-approval:
+    runs-on: ubuntu-latest
+    needs: wait-for-approval
+
+    steps:
+    - name: Check for approval
+      id: check_approval
+      run: |
+        echo "Checking for approval..."
+        APPROVED=$(gh issue list --search 'Release Approval Needed' --json comments --jq '.comments[].body' | grep -i 'approve' || true)
+        if [ -z "$APPROVED" ]; then
+          echo "Release not approved."
+          exit 1
+        else
+          echo "Release approved."
+        fi
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: check-approval
+
+    steps:
+    - name: Deploy to Production
+      if: success()
+      run: |
+        echo "Deploying to production..."
+        # Example deployment command
+        # npm run deploy:production
